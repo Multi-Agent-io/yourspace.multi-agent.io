@@ -1,126 +1,144 @@
-<!-- component for cookie banner -->
-<div id="cookie-consent-banner">
-  <div class="layout">
-    <p>Продолжая работу на сайте, Вы соглашаетесь с <a href="/terms/" class="underline" aria-label="Узнать больше об условия использования">условиями использования</a> и <a href="/privacy-policy/" class="underline" aria-label="Узнать больше о политике конфиденциальности">политикой конфиденциальности</a>. А еще мы используем <a href="/cookies/" class="underline" aria-label="Узнать больше об использования cookies">cookies</a>.
-    </p>
-    <button class="cookie-btn">Продолжить</button>
+<!-- Cookie Banner Component -->
+<div id="cookie-consent-overlay">
+  <div id="cookie-consent-banner">
+    <div class="layout">
+      <p>
+        Продолжая работу на сайте, Вы соглашаетесь с 
+        <a href="/terms/" class="" aria-label="Узнать больше об условия использования">условиями использования</a> 
+        и 
+        <a href="/privacy-policy/" class="" aria-label="Узнать больше о политике конфиденциальности">политикой конфиденциальности</a>. 
+        А еще мы используем 
+        <a href="/cookies/" class="" aria-label="Узнать больше об использования cookies">cookies</a>.
+      </p>
+      <button class="cookie-btn">Продолжить</button>
+    </div>
   </div>
 </div>
 
 <script>
-  const cookieBanner = document.querySelector<HTMLElement>('#cookie-consent-banner');
-  const cookieButton = document.querySelector<HTMLButtonElement>('.cookie-btn');
-  const COOKIE_AGREED_KEY = 'cookieAgreed';
+const overlay = document.querySelector<HTMLElement>('#cookie-consent-overlay');
+const cookieButton = document.querySelector<HTMLButtonElement>('.cookie-btn');
+const COOKIE_AGREED_KEY = 'cookieAgreed';
 
-  const hasConsented = (): boolean => localStorage.getItem(COOKIE_AGREED_KEY) === 'true';
+const hasConsented = (): boolean => localStorage.getItem(COOKIE_AGREED_KEY) === 'true';
+let yandexInitialized = false;
 
-  let yandexInitialized = false;
+declare global {
+  interface Window { ym?: (...args: any[]) => void; }
+}
 
-  declare global {
-    interface Window {
-      ym?: (...args: any[]) => void;
-    }
+const addNoscriptPixel = (): void => {
+  const img = document.createElement('img');
+  img.src = 'https://mc.yandex.ru/watch/103487153';
+  img.style.position = 'absolute';
+  img.style.left = '-9999px';
+  img.alt = '';
+
+  const div = document.createElement('div');
+  div.appendChild(img);
+  document.body.appendChild(div);
+};
+
+const yandexMetrika = (): void => {
+  if (!hasConsented() || yandexInitialized) return;
+  yandexInitialized = true;
+  addNoscriptPixel();
+
+  (function (m: any, e: Document, t: string, r: string, i: string) {
+    m[i] = m[i] || function (...args: any[]) { (m[i].a = m[i].a || []).push(args); };
+    m[i].l = Date.now();
+
+    if ([...e.scripts].some(script => script.src === r)) return;
+
+    const k = e.createElement(t);
+    const a = e.getElementsByTagName(t)[0];
+    k.async = true;
+    k.src = r;
+    a?.parentNode?.insertBefore(k, a);
+  })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
+
+  window.ym?.(103487153, 'init', {
+    clickmap: true,
+    trackLinks: true,
+    accurateTrackBounce: true,
+    webvisor: true,
+    ecommerce: 'dataLayer',
+  });
+};
+
+const preventInteraction = (e: Event) => e.preventDefault();
+const preventTabNavigation = (e: KeyboardEvent) => {
+  if (e.key === 'Tab') e.preventDefault();
+};
+
+if (overlay) {
+  const active = !hasConsented();
+  overlay.classList.toggle('active', active);
+
+  if (active) {
+    document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', preventTabNavigation, { capture: true });
+    document.addEventListener('wheel', preventInteraction, { passive: false, capture: true });
+    document.addEventListener('touchmove', preventInteraction, { passive: false, capture: true });
   }
+}
 
-  const addNoscriptPixel = (): void => {
-    const img = document.createElement('img');
-    img.src = 'https://mc.yandex.ru/watch/103487153';
-    img.style.position = 'absolute';
-    img.style.left = '-9999px';
-    img.alt = '';
+cookieButton?.addEventListener('click', () => {
+  overlay?.classList.remove('active');
+  localStorage.setItem(COOKIE_AGREED_KEY, 'true');
+  yandexMetrika();
 
-    const div = document.createElement('div');
-    div.appendChild(img);
-    document.body.appendChild(div);
-  };
+  document.body.style.overflow = '';
+  document.removeEventListener('keydown', preventTabNavigation, { capture: true });
+  document.removeEventListener('wheel', preventInteraction, { capture: true });
+  document.removeEventListener('touchmove', preventInteraction, { capture: true });
+});
 
-  const yandexMetrika = (): void => {
-    if (!hasConsented() || yandexInitialized) return;
-    yandexInitialized = true;
-
-    addNoscriptPixel();
-
-    (function (m: any, e: Document, t: string, r: string, i: string) {
-      m[i] = m[i] || function (...args: any[]) {
-        (m[i].a = m[i].a || []).push(args);
-      };
-      m[i].l = Date.now();
-
-      if ([...e.scripts].some(script => script.src === r)) return;
-
-      const k = e.createElement(t);
-      const a = e.getElementsByTagName(t)[0];
-      k.async = true;
-      k.src = r;
-      a?.parentNode?.insertBefore(k, a);
-    })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js', 'ym');
-
-    window.ym?.(103487153, 'init', {
-      clickmap: true,
-      trackLinks: true,
-      accurateTrackBounce: true,
-      webvisor: true,
-      ecommerce: 'dataLayer',
-    });
-  };
-
-  // Show the banner if user hasn't agreed yet
-  if (cookieBanner) {
-    cookieBanner.classList.toggle('active', !hasConsented());
-  }
-
-  // Handle "continue" click
-  cookieButton?.addEventListener('click', () => {
-    cookieBanner?.classList.remove('active');
-    localStorage.setItem(COOKIE_AGREED_KEY, 'true');
+document.addEventListener('DOMContentLoaded', () => {
+  if (hasConsented()) {
     yandexMetrika();
-  });
-
-  // Run on load if already agreed
-  document.addEventListener('DOMContentLoaded', () => {
-    if (hasConsented()) {
-      yandexMetrika();
-    }
-  });
+  }
+});
 </script>
 
+
 <style>
-  #cookie-consent-banner {
+  #cookie-consent-overlay {
     position: fixed;
-    top: auto;
+    top: 0;
     left: 0;
-    right: auto;
-    bottom: 0;
-    margin: 0;
-    color: #fff;
-    background: rgba(0, 0, 0, .9);
-    z-index: 999999;
     width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  #cookie-consent-overlay.active {
+    pointer-events: all;
+    opacity: 1;
+  }
+
+  #cookie-consent-banner {
+    background: rgba(0, 0, 0, 0.9);
+    color: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 500px;
     text-align: center;
-    -webkit-transition: all ease-out 0.3s;
-    -moz-transition: all ease-out 0.3s;
-    -ms-transition: all ease-out 0.3s;
-    -o-transition: all ease-out 0.3s;
-    transition: all ease-out 0.3s;
-    -webkit-transform: translate3d(0, 100%, 0);
-    -moz-transform: translate3d(0,100%,0);
-    -ms-transform: translate3d(0,100%,0);
-    -o-transform: translate3d(0,100%,0);
-    transform: translate3d(0, 100%, 0);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
+    transform: translateY(50px);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
   }
 
-  #cookie-consent-banner.active {
-    -webkit-transform: translate3d(0, 0, 0);
-    -moz-transform: translate3d(0,0,0);
-    -ms-transform: translate3d(0,0,0);
-    -o-transform: translate3d(0,0,0);
-    transform: translate3d(0, 0, 0);
-  }
-
-  .layout {
-    padding: calc(var(--space) * 0.5);
+  #cookie-consent-overlay.active #cookie-consent-banner {
+    transform: translateY(0);
+    opacity: 1;
   }
 
   .layout p {
@@ -128,12 +146,13 @@
     margin-bottom: var(--space-half);
   }
 
-  .cookie-btn{
+  .cookie-btn {
     font-size: var(--base-font-size);
     color: var(--color-dark-blue);
     text-transform: uppercase;
     cursor: pointer;
     transition: 0.33s ease-in-out opacity;
+    margin-top: 1rem;
   }
 
   .cookie-btn:hover {
@@ -141,11 +160,11 @@
   }
 
   #cookie-consent-banner a {
-    display: inline-block;
-    color: var(--color-blue-link)
+    color: var(--color-blue-link);
+    transition: color 0.33s ease-in;
   }
 
-  #cookie-consent-banner a:hover::after {
-    background-color:#fff;
+  #cookie-consent-banner a:hover {
+    color:var(--color-dark-blue);
   }
 </style>
