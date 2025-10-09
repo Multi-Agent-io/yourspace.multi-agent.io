@@ -10,16 +10,19 @@
             <a :href="featuresUrl" aria-label="Перейти к разделу 'Возможности'" class="link">Возможности</a>
           </li>
           <li class="nav__item" @click="closeMenu">
-            <a :href="casesUrl" aria-label="Перейти к разделу 'Кейсы'">Кейсы</a>
-          </li>
-          <li class="nav__item" @click="closeMenu">
             <a :href="stepsUrl" aria-label="Перейти к разделу 'Этапы Работы'">Этапы Работы</a>
           </li>
-          <li class="nav__item">
-            <button class="popup-trigger" aria-label="Оставить заявку">Хочу также</button>
+          <li class="nav__item" @click="closeMenu">
+            <a :href="casesUrl" aria-label="Перейти к разделу 'Кейсы'">Кейсы</a>
           </li>
-          <li class="nav__item nav__item--remote">
+          <li class="nav__item">
+            <a :href="aboutUsUrl" aria-label="Узнать больше о нас">О&nbsp;нас</a>
+          </li>
+          <li class="nav__item link-remote">
             <button class="popup-trigger" aria-label="Оставить заявку" >Получить карту в подарок</button>
+          </li>
+          <li class="nav__item">
+            <a href="https://t.me/MultiAgent_io" class="home-page__link--tg" target="_blank" aria-label="Запланировать замер для вашего умного дома"></a>
           </li>
         </ul>
       </nav>
@@ -74,6 +77,7 @@ const closeMenu = (): void => {
   isOpen.value = false;
 };
 
+const aboutUsUrl = withBase('/about-us/');
 const featuresUrl = withBase('/#features');
 const casesUrl = withBase('/#cases');
 const stepsUrl = withBase('/#steps');
@@ -111,7 +115,7 @@ const mainUrl = withBase('/')
     padding: 0.4em 0;
     font-size: calc(var(--base-font-size) * 0.8);
     font-variation-settings: var(--font-flex-medium);
-    color: Var(--color-dark);
+    color: var(--color-dark);
     z-index: 1;
     text-transform: lowercase;
   }
@@ -132,40 +136,37 @@ const mainUrl = withBase('/')
     z-index: -1;
   }
 
-  .nav__list a:hover,
-  .nav__list button:hover  {
+  .nav__list a:hover {
     color: #191919;
   }
 
-  .nav__list a:hover::before,
-  .nav__list button:hover::before  {
+  .nav__list a:hover::before{
     transform: translate(-50%, 50%) scaleX(1);
   }
 
-  .nav__item--remote {
-    padding: 5px 20px;
-    border-radius: 30px;
-    background-color: var(--color-blue-link);
-    transition: background-color 0.33s ease;
-    text-align: center;
-  }
-
-  .nav__item--remote button {
+  .nav__item button {
     color: #191919;
-    transition: color 0.3s ease;
   }
 
-  .nav__item--remote:hover {
-    background-color: var(--color-green) 
+  .home-page__link--tg {
+    display: block;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    background-image: url('data:image/svg+xml,<%3Fxml version="1.0" encoding="utf-8"%3F><!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools --><svg width="800px" height="800px" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="14" fill="url(%23paint0_linear_87_7225)"/><path d="M22.9866 10.2088C23.1112 9.40332 22.3454 8.76755 21.6292 9.082L7.36482 15.3448C6.85123 15.5703 6.8888 16.3483 7.42147 16.5179L10.3631 17.4547C10.9246 17.6335 11.5325 17.541 12.0228 17.2023L18.655 12.6203C18.855 12.4821 19.073 12.7665 18.9021 12.9426L14.1281 17.8646C13.665 18.3421 13.7569 19.1512 14.314 19.5005L19.659 22.8523C20.2585 23.2282 21.0297 22.8506 21.1418 22.1261L22.9866 10.2088Z" fill="white"/><defs><linearGradient id="paint0_linear_87_7225" x1="16" y1="2" x2="16" y2="30" gradientUnits="userSpaceOnUse"><stop stop-color="%2337BBFE"/><stop offset="1" stop-color="%23007DBB"/></linearGradient></defs></svg>');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: transform 0.33s ease-in-out;
   }
 
-  .nav__item--remote:hover button {
-    color: var(--color-light);
+  .home-page__link--tg:hover {
+    transform: scale(1.1);
   }
 
-  .nav__item--remote button:before {
-    opacity: 0;
-  }
+   .home-page__link--tg::before {
+    display: none;
+   }
 
   .header__btn  {
     display: none;

@@ -103,8 +103,8 @@ import WORKDECOR from '../assets/img/work-decor.webp';
           <img class="home-page-more__video-gif" src="./interactive-map.gif" alt="Интерактивная карта умного дома"/ >
       </div>
 
-      <div class="home-page__link">
-        <button class="popup-trigger link-with-arrow underline" aria-label="Оставить заявку">Хочу также</button>
+      <div class="home-page__link ">
+        <button class="popup-trigger link-with-arrow underline" aria-label="Оставить заявку">Хочу так же</button>
       </div>
     </div>
    </section>
@@ -295,7 +295,7 @@ import WORKDECOR from '../assets/img/work-decor.webp';
         <Image src={WORKDECOR} alt="" aria-hidden="true" />
       </div>
       <div class="home-page__link">
-        <a href="https://t.me/MultiAgent_io" class="title-blue" target="_blank" aria-label="Запланировать замер для вашего умного дома">Запишитесь на замер и получите интерактивную карту дома в подарок!</a>
+        <button class="popup-trigger title-blue"  aria-label="Запланировать замер для вашего умного дома">Запишитесь на замер и получите интерактивную карту дома в подарок</button>
       </div>
     </div>
   </div>
@@ -305,14 +305,6 @@ import WORKDECOR from '../assets/img/work-decor.webp';
   <Popup/>
 
 </Layout>
-
-<!-- <script>
-
-   document.querySelector('.popup-trigger')?.addEventListener('click', () => {
-      window.dispatchEvent(new CustomEvent('open-contact-popup'));
-    });
-
-</script> -->
 
 <style is:global>
   .home-page-cases .swiper {
@@ -627,17 +619,18 @@ import WORKDECOR from '../assets/img/work-decor.webp';
     max-width: 110px;
   }
 
-  .plan .home-page__link a {
+  .plan .home-page__link button {
+    text-align: right;
     text-decoration: underline;
     text-underline-offset: 2px;
     transition: text-decoration 0.3s ease-in;
   }
 
-  .plan .home-page__link a:hover {
+  .plan .home-page__link button:hover {
     color: var(--text-accent);
   }
 
-  .plan .home-page__link a:not(:is(:hover, :focus)) {
+  .plan .home-page__link button:not(:is(:hover, :focus)) {
     text-decoration-color: color-mix(in srgb, currentColor, transparent 75%);
   }
 
