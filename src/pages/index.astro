@@ -8,8 +8,9 @@ import { caseImages } from "../data/caseImages";
 
 import Layout from '../layouts/Layout.astro';
 import SwiperComponent from '../components/SwiperComponent.astro';
-import CaseList from '../components/caseList.astro';
+import CaseList from '../components/CaseList.astro';
 import CatOnVacuum from '../components/CatOnVacuum.astro';
+import Popup from '../components/Popup.astro';
 
 // images
 import HASS from '../assets/img/hass-logo.svg';
@@ -32,8 +33,6 @@ import STEP1 from '../assets/img/step-1.webp';
 import STEP2 from '../assets/img/step-2.webp';
 import STEP3 from '../assets/img/step-3.webp';
 import STEP4 from '../assets/img/step-4.webp';
-
-import CASE1 from '../assets/img/cases/1.webp';
 
 import VOICEASSISTANT from '../assets/img/voice-assistant.webp';
 
@@ -105,7 +104,7 @@ import WORKDECOR from '../assets/img/work-decor.webp';
       </div>
 
       <div class="home-page__link">
-        <a href={withBase('/about-us/')} class="link-with-arrow underline" aria-label="Узнать больше о нашей компании">О нас</a>
+        <button class="popup-trigger link-with-arrow underline" aria-label="Оставить заявку">Хочу также</button>
       </div>
     </div>
    </section>
@@ -303,8 +302,17 @@ import WORKDECOR from '../assets/img/work-decor.webp';
 
   <!-- CAT -->
   <CatOnVacuum/>
+  <Popup/>
 
 </Layout>
+
+<!-- <script>
+
+   document.querySelector('.popup-trigger')?.addEventListener('click', () => {
+      window.dispatchEvent(new CustomEvent('open-contact-popup'));
+    });
+
+</script> -->
 
 <style is:global>
   .home-page-cases .swiper {
@@ -342,11 +350,11 @@ import WORKDECOR from '../assets/img/work-decor.webp';
   .home-page__link {
     margin: 0 auto;
     width: 100%;
-    font-size: calc(var(--base-font-size) * 1.5);
     text-align: right;
   }
 
-  .home-page__link a {
+  .home-page__link button {
+    font-size: calc(var(--base-font-size) * 1.5);
     font-variation-settings: var(--font-flex-medium);
   }
 
