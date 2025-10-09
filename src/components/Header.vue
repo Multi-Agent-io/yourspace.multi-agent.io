@@ -21,7 +21,7 @@
           <li class="nav__item link-remote">
             <button class="popup-trigger" aria-label="Оставить заявку" >Получить карту в подарок</button>
           </li>
-          <li class="nav__item">
+          <li class="nav__item nav__item--tg">
             <a href="https://t.me/MultiAgent_io" class="home-page__link--tg" target="_blank" aria-label="Запланировать замер для вашего умного дома"></a>
           </li>
         </ul>
@@ -146,6 +146,10 @@ const mainUrl = withBase('/')
 
   .nav__item button {
     color: #191919;
+  }
+
+  .nav__item--tg {
+    line-height: 0;
   }
 
   .home-page__link--tg {

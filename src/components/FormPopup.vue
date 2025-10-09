@@ -103,8 +103,10 @@ function formatPhone(e: Event) {
   let digits = input.replace(/\D/g, '');
 
   
-  if (digits.startsWith('8') || digits.startsWith('9')) {
-    digits = '7' + digits.slice(1);
+  if (digits.startsWith('8')) {
+    digits = '78' + digits.slice(1);
+  } else if(digits.startsWith('9')) {
+     digits = '79' + digits.slice(1);
   } else if (digits.startsWith('7')) {
   } else if (!digits.startsWith('7')) {
     digits = '7' + digits;
@@ -165,7 +167,6 @@ function submitForm() {
     return;
   }
   if (hcaptchaRef.value) {
-    console.log('here')
     hcaptchaRef.value.execute();
   }
 }
