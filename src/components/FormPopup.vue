@@ -28,7 +28,14 @@
       </div>
 
       <!-- Form state -->
-      <form v-else ref="formRef" @submit.prevent="sendEmail">
+      <form v-else ref="formRef" @submit.prevent="submitForm">
+        <vue-hcaptcha
+          ref="hcaptchaRef"
+          :sitekey="siteKey"
+          size="invisible"
+          theme="dark"
+          @verify="sendEmail"
+        />
         <h2>Получите консультацию и запланируйте замер. Бесплатно!</h2>
         <input v-model="form.name" type="text" name="name" placeholder="Ваше имя" required />
         <input
@@ -58,12 +65,15 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 import emailjs from '@emailjs/browser';
+import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 
 const isOpen = ref(false);
 const success = ref(false);
 const loading = ref(false);
 const status = ref('');
 const formRef = ref<HTMLFormElement | null>(null);
+const hcaptchaRef = ref<any>(null); 
+const siteKey =  import.meta.env.PUBLIC_HCAPTCHA;
 
 const form = ref({
   name: '',
@@ -108,20 +118,18 @@ function formatPhone(e: Event) {
   form.value.phone = numbers;
 }
 
-async function sendEmail() {
+async function sendEmail(token: string) {
   if (!formRef.value) return;
 
   loading.value = true;
   status.value = '';
 
-  
-  if (!form.value.agree) {
-    status.value = '⚠️ Необходимо согласие на обработку данных для отправки формы.';
-    loading.value = false;
-    return;
-  }
 
   try {
+    // Append hCaptcha token to form if needed
+    const formData = new FormData(formRef.value);
+    formData.append('h-captcha-response', token);
+
     await emailjs.sendForm(
       import.meta.env.PUBLIC_EMAILJS_SERVICE_ID,
       import.meta.env.PUBLIC_EMAILJS_TEMPLATE_ID,
@@ -130,10 +138,23 @@ async function sendEmail() {
     );
 
     success.value = true;
-  } catch (error: any) {
-    status.value = `❌ Failed to send: ${error.text || error.message}`;
+    formRef.value.reset();
+    hcaptchaRef.value.reset();
+  } catch (err: any) {
+    status.value = `❌ Ошибка: ${err.text || err.message}`;
   } finally {
     loading.value = false;
+  }
+}
+
+function submitForm() {
+  if (!form.value.agree) {
+    status.value = '⚠️ Пожалуйста, дайте согласие на обработку данных';
+    return;
+  }
+  if (hcaptchaRef.value) {
+    console.log('here')
+    hcaptchaRef.value.execute();
   }
 }
 
