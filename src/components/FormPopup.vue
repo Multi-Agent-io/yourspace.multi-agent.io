@@ -48,11 +48,11 @@
         />
         <textarea v-model="form.message" name="message" placeholder="Комментарий" ></textarea>
         <label class="custom-checkbox">
-          <input type="checkbox" checked v-model="form.agree" />
+          <input type="checkbox" v-model="form.agree" />
           <span class="checkmark"></span>
           <span> Я даю свое согласие на обработку <a href="/terms" target="_blank" class="link underline" aria-label="Узнать больше об условиях использования">персональных данных</a> и соглашаюсь с условиями и <a href="/privacy-policy" target="_blank"  class="link underline" aria-label="Узнать больше о политике конфиденциальности">политикой конфиденциальности</a>.</span>
         </label>
-        <button type="submit" :disabled="loading">
+        <button type="submit" :disabled="loading || !form.agree">
           <span v-if="loading" class="spinner"></span>
           <span v-else>Отправить</span>
         </button>
@@ -79,7 +79,7 @@ const form = ref({
   name: '',
   phone: '',
   message: '',
-  agree: true,
+  agree: false,
 });
 
 function openPopup() {
@@ -89,7 +89,7 @@ function openPopup() {
   form.value.name = '';
   form.value.phone = '';
   form.value.message = '';
-  form.value.agree = true;
+  form.value.agree = false;
 }
 
 function closePopup() {
@@ -98,25 +98,37 @@ function closePopup() {
 
 function formatPhone(e: Event) {
   let input = (e.target as HTMLInputElement).value;
-  
-  let numbers = input.replace(/\D/g, '');
 
   
-  if (numbers.length > 0) {
-    numbers = '+' + numbers;
-  }
-  if (numbers.length > 2) {
-    numbers = numbers.slice(0, 2) + ' (' + numbers.slice(2);
-  }
-  if (numbers.length > 7) {
-    numbers = numbers.slice(0, 7) + ') ' + numbers.slice(7);
-  }
-  if (numbers.length > 12) {
-    numbers = numbers.slice(0, 12) + '-' + numbers.slice(12, 16);
+  let digits = input.replace(/\D/g, '');
+
+  
+  if (digits.startsWith('8') || digits.startsWith('9')) {
+    digits = '7' + digits.slice(1);
+  } else if (digits.startsWith('7')) {
+  } else if (!digits.startsWith('7')) {
+    digits = '7' + digits;
   }
 
-  form.value.phone = numbers;
+  let formatted = '+7';
+
+  if (digits.length > 1) {
+    formatted += ' (' + digits.slice(1, 4);
+  }
+  if (digits.length >= 5) {
+    formatted += ') ' + digits.slice(4, 7);
+  }
+  if (digits.length >= 8) {
+    formatted += '-' + digits.slice(7, 9);
+  }
+  if (digits.length >= 10) {
+    formatted += '-' + digits.slice(9, 11);
+  }
+
+ 
+  form.value.phone = formatted;
 }
+
 
 async function sendEmail(token: string) {
   if (!formRef.value) return;
@@ -126,7 +138,7 @@ async function sendEmail(token: string) {
 
 
   try {
-    // Append hCaptcha token to form if needed
+    
     const formData = new FormData(formRef.value);
     formData.append('h-captcha-response', token);
 

@@ -173,6 +173,31 @@ p:last-child, ul:last-child, ol:last-child, blockquote:last-child, table:last-ch
   text-align: left !important;
 }
 
+  .link-remote {
+    padding: 5px 20px;
+    border-radius: 30px;
+    background-color: var(--color-blue-link);
+    transition: background-color 0.33s ease;
+    text-align: center;
+  }
+
+  .link-remote button {
+    color: #191919;
+    transition: color 0.3s ease;
+  }
+
+  .link-remote:hover {
+    background-color: var(--color-green) 
+  }
+
+  .link-remote:hover button {
+    color: #fff;
+  }
+
+  .link-remote button:before {
+    opacity: 0;
+  }
+
 
 @media screen and (max-width: 595px) {
   h1 { font-size: calc(var(--base-font-size) * 2.4) }
