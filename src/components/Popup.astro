@@ -1,0 +1,170 @@
+<!-- Promo Popup -->
+<div class="popup-overlay" id="promoPopup">
+  <div class="popup">
+    <button id="closePromo" style="position:absolute; top:1rem; right:1rem;">&times;</button>
+    <h2>🎉 Сюрприз!</h2>
+    <p>Вы погладили кота! Он дарит вам эксклюзивную скидку 5%:</p>
+    <div class="promo-code" id="promoCode"></div>
+    <button id="copyPromo">Скопировать код</button>
+  </div>
+</div>
+
+<script>
+const cat = document.querySelector<HTMLImageElement>('.home-page__cat');
+const popup = document.getElementById('promoPopup');
+const promoCodeEl = document.getElementById('promoCode');
+const copyBtn = document.getElementById('copyPromo');
+const closeBtn = document.getElementById('closePromo');
+
+
+if (cat && popup && promoCodeEl && copyBtn && closeBtn) {
+  
+  let promoCode = 'КОТНАПЫЛЕСОСЕ';
+
+  if (promoCode) {
+    promoCodeEl.textContent = promoCode;
+  }
+
+  cat.addEventListener('click', () => {
+    if (!promoCode) {
+      promoCode = 'CAT' + Math.floor(Math.random() * 900000 + 100000);
+      sessionStorage.setItem('catPromo', promoCode);
+      promoCodeEl.textContent = promoCode;
+    }
+    popup.classList.add('active');
+    spawnConfetti(popup, 80);
+  });
+
+    function spawnConfetti(popup: HTMLElement, count = 50) {
+
+    const rect = popup?.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 6;
+
+    for (let i = 0; i < count; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti';
+      popup.appendChild(confetti);
+
+      
+      const size = Math.random() * 10 + 6;
+      confetti.style.width = confetti.style.height = `${size}px`;
+
+      
+      confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
+
+      // Initial position
+      confetti.style.left = `${centerX}px`;
+      confetti.style.top = `${centerY}px`;
+
+      
+      const angle = Math.random() * 2 * Math.PI; // 0 - 360 deg
+      const distance = Math.random() * 150 + 50; // pixels
+      const duration = Math.random() * 1000 + 800; // 0.8s - 1.8s
+
+      const deltaX = Math.cos(angle) * distance;
+      const deltaY = Math.sin(angle) * distance + 200;
+
+      
+      confetti.animate([
+        { transform: 'translate(0,0)', opacity: 1 },
+        { transform: `translate(${deltaX}px, ${deltaY}px) rotate(${Math.random()*360}deg)`, opacity: 0 }
+      ], {
+        duration: duration,
+        easing: 'ease-out',
+        fill: 'forwards'
+      });
+
+      
+      setTimeout(() => confetti.remove(), duration);
+    }
+  }
+
+  function copyToClipboard(text: string) {
+    if (!text) return;
+
+   
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Промо код скопирован! 🎁');
+      }).catch(() => fallbackCopy(text));
+    } else {
+      // Fallback for older browsers / iOS Safari
+      fallbackCopy(text);
+    }
+  }
+
+  // Fallback function for safari
+  function fallbackCopy(text: string) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      document.execCommand('copy');
+      alert('Промо код скопирован! 🎁');
+    } catch (err) {
+      alert('Не удалось скопировать код. Пожалуйста, скопируйте вручную.');
+    }
+    document.body.removeChild(textarea);
+  }
+
+  copyBtn.addEventListener('click', () => {
+    copyToClipboard(promoCode);
+  });
+
+  closeBtn.addEventListener('click', () => popup.classList.remove('active'));
+
+  popup.addEventListener('click', (e: MouseEvent) => {
+    if (e.target === popup) popup.classList.remove('active');
+  });
+  
+}
+</script>
+
+
+<style>
+
+#promoCode {
+  position: relative;
+}
+
+#promoPopup .popup {
+  display: flex;
+  flex-direction: column;
+}
+
+#promoPopup h2 {
+  font-size: 1.8rem;
+}
+
+.promo-code {
+  font-weight: bold;
+  font-size: 24px;
+  color: var(--color-green);
+  background: #f0f0ff;
+  padding: 12px 16px;
+  border-radius: 8px;
+  text-align: center;
+  margin: 16px 0;
+  user-select: all;
+}
+
+#promoPopup button {
+  padding: 0.9rem 1rem;
+  font-size: 1.1rem;
+  background: var(--color-green);
+  color: var(--color-light);
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease-in-out;
+}
+
+#promoPopup button:hover {
+  background-color: var(--text-accent)
+}
+
+
+</style>

@@ -3,6 +3,7 @@
 import Header from '../components/Header.vue';
 import Footer from '../components/Footer.astro';
 import CookieConsent from '../components/CookieConsent.astro';
+import FormPopup from "../components/FormPopup.vue";
 
 import { withBase } from '@/utils/withBase';
 
@@ -67,5 +68,14 @@ import '../assets/styles/main.css';
       </main>
 
 			<CookieConsent/>
+			<FormPopup client:load/>
 	</body>
 </html>
+
+<script>
+	document.querySelectorAll('.popup-trigger')?.forEach(item => {
+		item?.addEventListener('click', () => {
+			window.dispatchEvent(new CustomEvent('open-contact-popup'));
+		});
+	})
+</script>

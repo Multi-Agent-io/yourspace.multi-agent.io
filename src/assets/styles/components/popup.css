@@ -1,0 +1,77 @@
+/* Overlay */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+
+/* Overlay active state */
+.popup-overlay.active {
+  background: rgba(0,0,0,0.5);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Popup box */
+.popup {
+  background: var(--color-light);
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+
+  /* Animation */
+  transform: scale(0.8);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Popup active */
+.popup-overlay.active .popup {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.popup-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup-close-btn svg {
+  width: 24px;
+  height: 24px;
+  color: var(--color-dark);
+  transition: color 0.3s ease-in-out;
+}
+
+.popup-close-btn:hover svg {
+  color: var(--text-accent);
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #f43f5e; 
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 50%;
+  will-change: transform, opacity;
+}

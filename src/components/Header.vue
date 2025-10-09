@@ -16,10 +16,10 @@
             <a :href="stepsUrl" aria-label="Перейти к разделу 'Этапы Работы'">Этапы Работы</a>
           </li>
           <li class="nav__item">
-            <a :href="aboutUsUrl" aria-label="Узнать больше о нас">О&nbsp;нас</a>
+            <button class="popup-trigger" aria-label="Оставить заявку">Хочу также</button>
           </li>
           <li class="nav__item nav__item--remote">
-            <a href="https://t.me/MultiAgent_io" aria-label="Посетить наш магазин умных устройств" target="_blank">Получить интерактивную карту дома в подарок</a>
+            <button class="popup-trigger" aria-label="Оставить заявку" >Получить карту в подарок</button>
           </li>
         </ul>
       </nav>
@@ -74,12 +74,10 @@ const closeMenu = (): void => {
   isOpen.value = false;
 };
 
-const aboutUsUrl = withBase('/about-us/');
 const featuresUrl = withBase('/#features');
 const casesUrl = withBase('/#cases');
 const stepsUrl = withBase('/#steps');
 const mainUrl = withBase('/')
-
 </script>
 
 <style scoped> 
@@ -106,15 +104,20 @@ const mainUrl = withBase('/')
     text-transform: lowercase;
   }
 
-  .nav__list a {
+  .nav__list a,
+  .nav__list button {
     position: relative;
     display: inline-block;
     padding: 0.4em 0;
     font-size: calc(var(--base-font-size) * 0.8);
+    font-variation-settings: var(--font-flex-medium);
+    color: Var(--color-dark);
     z-index: 1;
+    text-transform: lowercase;
   }
 
-  .nav__list a::before {
+  .nav__list a::before,
+  .nav__list button::before {
     content: "";
     position: absolute;
     bottom: 50%;
@@ -129,11 +132,13 @@ const mainUrl = withBase('/')
     z-index: -1;
   }
 
-  .nav__list a:hover {
+  .nav__list a:hover,
+  .nav__list button:hover  {
     color: #191919;
   }
 
-  .nav__list a:hover::before {
+  .nav__list a:hover::before,
+  .nav__list button:hover::before  {
     transform: translate(-50%, 50%) scaleX(1);
   }
 
@@ -145,7 +150,7 @@ const mainUrl = withBase('/')
     text-align: center;
   }
 
-  .nav__item--remote a {
+  .nav__item--remote button {
     color: #191919;
     transition: color 0.3s ease;
   }
@@ -154,11 +159,11 @@ const mainUrl = withBase('/')
     background-color: var(--color-green) 
   }
 
-  .nav__item--remote:hover a {
+  .nav__item--remote:hover button {
     color: var(--color-light);
   }
 
-  .nav__item--remote a:before {
+  .nav__item--remote button:before {
     opacity: 0;
   }
 
@@ -215,7 +220,8 @@ const mainUrl = withBase('/')
         text-align: center;
       }
 
-      .nav__item a {
+      .nav__item a,
+      .nav__item button {
         font-size: calc(var(--base-font-size) * 0.7);
       }
    }
@@ -252,7 +258,8 @@ const mainUrl = withBase('/')
         overflow: hidden;
       }
 
-      .nav__item a {
+      .nav__item a,
+      .nav__item button  {
         font-size: var(--base-font-size) ;
       }
 
