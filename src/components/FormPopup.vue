@@ -100,37 +100,39 @@ function formatPhone(e: Event) {
   let input = (e.target as HTMLInputElement).value;
 
   
-  let digits = input.replace(/\D/g, '');
+  const startsWithPlus = input.startsWith('+');
 
   
-  if (digits.startsWith('8')) {
-    digits = '78' + digits.slice(1);
-  } else if(digits.startsWith('9')) {
-     digits = '79' + digits.slice(1);
-  } else if (digits.startsWith('7')) {
-  } else if (!digits.startsWith('7')) {
-    digits = '7' + digits;
+  let digits = input.replace(/\D/g, '');
+
+  let formatted = '';
+
+  if (startsWithPlus) {
+    formatted = '+';
+
+    
+    if (digits.startsWith('7')) {
+      digits = digits.slice(1); 
+      formatted += '7';
+
+      if (digits.length > 0) formatted += ' (' + digits.slice(0, 3);
+      if (digits.length >= 4) formatted += ') ' + digits.slice(3, 6);
+      if (digits.length >= 7) formatted += '-' + digits.slice(6, 8);
+      if (digits.length >= 9) formatted += '-' + digits.slice(8, 10);
+    }
+  } else {
+    if (digits.startsWith('8')) digits = '7' + digits.slice(1);
+    else if (digits.startsWith('9')) digits = '79' + digits.slice(1);
+    else if (!digits.startsWith('7')) digits = '7' + digits;
+    formatted = '+7';
+    if (digits.length > 1) formatted += ' (' + digits.slice(1, 4);
+    if (digits.length >= 5) formatted += ') ' + digits.slice(4, 7);
+    if (digits.length >= 8) formatted += '-' + digits.slice(7, 9);
+    if (digits.length >= 10) formatted += '-' + digits.slice(9, 11);
   }
 
-  let formatted = '+7';
-
-  if (digits.length > 1) {
-    formatted += ' (' + digits.slice(1, 4);
-  }
-  if (digits.length >= 5) {
-    formatted += ') ' + digits.slice(4, 7);
-  }
-  if (digits.length >= 8) {
-    formatted += '-' + digits.slice(7, 9);
-  }
-  if (digits.length >= 10) {
-    formatted += '-' + digits.slice(9, 11);
-  }
-
- 
   form.value.phone = formatted;
 }
-
 
 async function sendEmail(token: string) {
   if (!formRef.value) return;
