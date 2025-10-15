@@ -22,10 +22,16 @@ const COOKIE_AGREED_KEY = 'cookieAgreed';
 
 const hasConsented = (): boolean => localStorage.getItem(COOKIE_AGREED_KEY) === 'true';
 let yandexInitialized = false;
+let mailruInitialized = false;
 
 declare global {
-  interface Window { ym?: (...args: any[]) => void; }
+  interface Window { 
+    ym?: (...args: any[]) => void; 
+    _tmr?: any[];
+  }
 }
+
+// YANDEX
 
 const addNoscriptPixel = (): void => {
   const img = document.createElement('img');
@@ -50,7 +56,7 @@ const yandexMetrika = (): void => {
 
     if ([...e.scripts].some(script => script.src === r)) return;
 
-    const k = e.createElement(t);
+    const k = e.createElement(t) as HTMLScriptElement;
     const a = e.getElementsByTagName(t)[0];
     k.async = true;
     k.src = r;
@@ -64,6 +70,44 @@ const yandexMetrika = (): void => {
     webvisor: true,
     ecommerce: 'dataLayer',
   });
+};
+
+
+// MAIL
+
+const addMailruNoscriptPixel = (): void => {
+  const img = document.createElement('img');
+  img.src = 'https://top-fwz1.mail.ru/counter?id=3709261;js=na';
+  img.style.position = 'absolute';
+  img.style.left = '-9999px';
+  img.alt = 'Top.Mail.Ru';
+  const div = document.createElement('div');
+  div.appendChild(img);
+  document.body.appendChild(div);
+};
+
+const mailruCounter = (): void => {
+  if (!hasConsented() || mailruInitialized) return;
+  mailruInitialized = true;
+  addMailruNoscriptPixel();
+
+  window._tmr = window._tmr || [];
+  window._tmr.push({ id: '3709261', type: 'pageView', start: new Date().getTime() });
+
+  (function (d, w, id) {
+    if (d.getElementById(id)) return;
+    const ts = d.createElement('script');
+    ts.type = 'text/javascript';
+    ts.async = true;
+    ts.id = id;
+    ts.src = 'https://top-fwz1.mail.ru/js/code.js';
+    const f = function () {
+      const s = d.getElementsByTagName('script')[0];
+      s?.parentNode?.insertBefore(ts, s);
+    };
+    if ((w as any).opera === '[object Opera]') d.addEventListener('DOMContentLoaded', f, false);
+    else f();
+  })(document, window, 'tmr-code');
 };
 
 const preventInteraction = (e: Event) => e.preventDefault();
@@ -87,6 +131,7 @@ cookieButton?.addEventListener('click', () => {
   overlay?.classList.remove('active');
   localStorage.setItem(COOKIE_AGREED_KEY, 'true');
   yandexMetrika();
+  mailruCounter();
 
   document.body.style.overflow = '';
   document.removeEventListener('keydown', preventTabNavigation, { capture: true });
@@ -97,6 +142,7 @@ cookieButton?.addEventListener('click', () => {
 document.addEventListener('DOMContentLoaded', () => {
   if (hasConsented()) {
     yandexMetrika();
+    mailruCounter();
   }
 });
 </script>
