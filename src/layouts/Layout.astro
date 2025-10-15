@@ -61,15 +61,16 @@ import '../assets/styles/main.css';
 	<meta name="twitter:image" content={ogImage}>
 </head>
 	<body transition:animate="fade" class:list={[{dark: isDark}]}>
-      <main class="main">
-        <Header client:load/>
-         <slot />
-         <Footer/>
-      </main>
+		<main class="main">
+			<Header client:load/>
+				<slot />
+				<Footer/>
+		</main>
 
-			<CookieConsent/>
-			<FormPopup client:load/>
+		<CookieConsent/>
+		<FormPopup client:load/>
 	</body>
+	
 </html>
 
 <script>
