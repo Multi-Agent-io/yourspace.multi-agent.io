@@ -10,7 +10,7 @@
         А еще мы используем 
         <a href="/cookies/" class="" aria-label="Узнать больше об использования cookies">cookies</a>.
       </p>
-      <button class="cookie-btn">Продолжить</button>
+      <button class="cookie-btn">Ok</button>
     </div>
   </div>
 </div>
@@ -23,6 +23,15 @@ const COOKIE_AGREED_KEY = 'cookieAgreed';
 const hasConsented = (): boolean => localStorage.getItem(COOKIE_AGREED_KEY) === 'true';
 let yandexInitialized = false;
 let mailruInitialized = false;
+
+// Add padding to body when popup is active
+const addBodyPadding = (): void => {
+  document.body.style.paddingBottom = '80px';
+};
+
+const removeBodyPadding = (): void => {
+  document.body.style.paddingBottom = '';
+};
 
 declare global {
   interface Window { 
@@ -110,20 +119,15 @@ const mailruCounter = (): void => {
   })(document, window, 'tmr-code');
 };
 
-const preventInteraction = (e: Event) => e.preventDefault();
-const preventTabNavigation = (e: KeyboardEvent) => {
-  if (e.key === 'Tab') e.preventDefault();
-};
 
 if (overlay) {
   const active = !hasConsented();
   overlay.classList.toggle('active', active);
 
   if (active) {
-    document.body.style.overflow = 'hidden';
-    document.addEventListener('keydown', preventTabNavigation, { capture: true });
-    document.addEventListener('wheel', preventInteraction, { passive: false, capture: true });
-    document.addEventListener('touchmove', preventInteraction, { passive: false, capture: true });
+    addBodyPadding();
+  } else {
+    removeBodyPadding();
   }
 }
 
@@ -133,10 +137,7 @@ cookieButton?.addEventListener('click', () => {
   yandexMetrika();
   mailruCounter();
 
-  document.body.style.overflow = '';
-  document.removeEventListener('keydown', preventTabNavigation, { capture: true });
-  document.removeEventListener('wheel', preventInteraction, { capture: true });
-  document.removeEventListener('touchmove', preventInteraction, { capture: true });
+  removeBodyPadding();
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -151,66 +152,96 @@ document.addEventListener('DOMContentLoaded', () => {
 <style>
   #cookie-consent-overlay {
     position: fixed;
-    top: 0;
+    bottom: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background: rgba(0, 0, 0, 0.95);
     z-index: 999999;
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transform: translateY(100%);
+    transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
   #cookie-consent-overlay.active {
     pointer-events: all;
     opacity: 1;
+    transform: translateY(0);
   }
 
   #cookie-consent-banner {
-    background: rgba(0, 0, 0, 0.9);
+    background: transparent;
     color: #fff;
-    padding: 2rem;
-    border-radius: 12px;
-    max-width: 500px;
-    text-align: center;
-    transform: translateY(50px);
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    opacity: 0;
-  }
-
-  #cookie-consent-overlay.active #cookie-consent-banner {
-    transform: translateY(0);
+    padding: 1rem 2rem;
+    border-radius: 0;
+    max-width: none;
+    width: 100%;
+    text-align: left;
+    transform: none;
+    transition: none;
     opacity: 1;
   }
 
+  .layout {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
   .layout p {
-    font-size: var(--base-font-size);
-    margin-bottom: var(--space-half);
+    font-size: 0.875rem;
+    margin: 0;
+    flex: 1;
+    line-height: 1.4;
   }
 
   .cookie-btn {
-    font-size: var(--base-font-size);
-    color: var(--color-dark-blue);
+    font-size: 0.875rem;
+    color: #fff;
+    background: var(--color-blue, #007bff);
     text-transform: uppercase;
     cursor: pointer;
     transition: 0.33s ease-in-out opacity;
-    margin-top: 1rem;
+    margin: 0;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .cookie-btn:hover {
-    opacity: 0.7;
+    opacity: 0.8;
   }
 
   #cookie-consent-banner a {
-    color: var(--color-blue-link);
+    color: var(--color-blue-link, #66b3ff);
     transition: color 0.33s ease-in;
+    text-decoration: underline;
   }
 
   #cookie-consent-banner a:hover {
-    color:var(--color-dark-blue);
+    color: #fff;
+  }
+
+  @media (max-width: 768px) {
+    .layout {
+      flex-direction: column;
+      text-align: center;
+      gap: 0.75rem;
+    }
+    
+    .layout p {
+      font-size: 0.8rem;
+    }
+    
+    .cookie-btn {
+      width: 100%;
+      padding: 0.75rem;
+    }
   }
 </style>
