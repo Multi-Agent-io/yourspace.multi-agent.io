@@ -279,7 +279,7 @@ import WORKDECOR from '../assets/img/work-decor.webp';
           <Image src={VOICEASSISTANT} alt="voice helper" />
         </div>
         <div class="home-page-voice__info">
-          <video controls poster="/voice-video-cover.webp">
+          <video controls preload="none" poster="/voice-video-cover.webp">
             <source src={withBase("/video/smart-home-voice.mp4")} type="video/mp4">
             Your browser does not support the video tag.
           </video>
