@@ -143,6 +143,10 @@ p:last-child, ul:last-child, ol:last-child, blockquote:last-child, table:last-ch
   font-variation-settings: 'GRAD' 132, 'wdth' 120;
 }
 
+.underline-simple {
+  border-bottom: 2px solid var(--color-dark);
+}
+
 /* underline for links */
 .underline {
   position: relative;

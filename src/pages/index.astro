@@ -58,10 +58,25 @@ import WORKDECOR from '../assets/img/work-decor.webp';
     </div>
   </section>
 
+  <!-- video section -->
+  <section class="section-blue video">
+    <div class="layout">
+      <div class="home-page-more__video">
+        <Image src={VIDEO} alt="" aria-hidden="true" />
+          <img class="home-page-more__video-gif" src="./interactive-map.gif" alt="Интерактивная карта умного дома"/ >
+      </div>
+
+      <div class="home-page__link center">
+        <button class="popup-trigger underline-simple" aria-label="Оставить заявку">Хочу так же</button>
+      </div>
+      
+    </div>
+   </section>
+
   <!-- More about Smart Home -->
   <section class="home-page-more">
     <div class="layout">
-      <Image class="home-page-more__message-img" src={MESSAGEDECOR} alt="Не зависит от бренда, Не требует перепланировки" />
+      
       <div class="home-page-more__grid">
         <div class="home-page-more__grid-item">
           <Image src={FEAT1} alt="" aria-hidden="true" />
@@ -92,22 +107,10 @@ import WORKDECOR from '../assets/img/work-decor.webp';
           </div>
         </div>
       </div>
+
+      <Image class="home-page-more__message-img" src={MESSAGEDECOR} alt="Не зависит от бренда, Не требует перепланировки" />
     </div>
   </section>
-
-  <!-- video section -->
-   <section class="section-blue video">
-    <div class="layout">
-      <div class="home-page-more__video">
-        <Image src={VIDEO} alt="" aria-hidden="true" />
-          <img class="home-page-more__video-gif" src="./interactive-map.gif" alt="Интерактивная карта умного дома"/ >
-      </div>
-
-      <div class="home-page__link ">
-        <button class="popup-trigger link-with-arrow underline" aria-label="Оставить заявку">Хочу так же</button>
-      </div>
-    </div>
-   </section>
 
   <!-- Smart Home features -->
   <section id="features" class="home-page-features">
@@ -395,6 +398,14 @@ document.addEventListener('DOMContentLoaded', () => {
   .home-page-cases .swiper {
     margin-bottom: var(--space);
   }
+
+  .home-page-features .swiper-wrapper {
+    margin-bottom: calc(var(--space) * 0.5);
+  }
+
+  .home-page-features .layout {
+    padding-top: 0;
+  }
 </style>
 
 
@@ -409,7 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   h1 .title-blue {
-    font-variation-settings: var(--font-flex-base);
+    font-variation-settings: var(--font-flex-bold);
     text-transform: uppercase;
   }
 
@@ -430,6 +441,10 @@ document.addEventListener('DOMContentLoaded', () => {
     text-align: right;
   }
 
+  .home-page__link.center {
+    text-align: center;
+  }
+
   .home-page__link button {
     font-size: calc(var(--base-font-size) * 1.5);
     font-variation-settings: var(--font-flex-medium);
@@ -447,6 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
     width: 100%;
     overflow: hidden;
     margin-bottom: var(--space-section);
+    padding-top: var(--space);
   }
 
   .home-page-main .layout {
@@ -482,11 +498,13 @@ document.addEventListener('DOMContentLoaded', () => {
     display: flex;
     align-items: center;
     gap: calc(var(--space) * 1.4);
+    margin-top: calc(var(--space)*1.5);
   }
 
   .home-page-main__hass-block p {
     margin-bottom: 0;
     font-size: calc(var(--base-font-size) * 1.5);
+    line-height: 1.2;
   }
 
   .home-page-main__hass-block span {
@@ -500,7 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   .home-page-more__message-img{ 
-    margin-bottom: calc(var(--space) * 3.5);
+    margin-bottom: var(--space);
   }
 
   .home-page-more__grid {

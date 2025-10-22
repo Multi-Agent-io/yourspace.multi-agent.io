@@ -62,6 +62,6 @@ button {
 }
 
 .section-blue {
-  padding: var(--space) 0;
+  padding: calc(var(--space)*2) 0;
   background-color: rgba(160, 197, 232, 0.21);
 }
