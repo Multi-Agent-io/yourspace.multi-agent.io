@@ -309,17 +309,52 @@ import WORKDECOR from '../assets/img/work-decor.webp';
 
 </Layout>
 
+<!--
+  Логика показа попапа консультации:
+  
+  УСЛОВИЯ ПОКАЗА:
+  1. Пользователь проскроллил ниже первого экрана (на высоту viewport)
+  2. Пользователь не скроллит 2+ секунд
+  3. Пользователь не кликает 3+ секунд  
+  4. Вкладка активна (не скрыта)
+  5. Прошло 14 секунд с момента последней активности
+  
+  ТАЙМЕРЫ:
+  - 2 сек - пауза в скролле (если пользователь перестал скроллить)
+  - 3 сек - пауза в кликах (если пользователь перестал кликать)
+  - 14 сек - основной таймер показа попапа
+  
+  ОТМЕНА ТАЙМЕРОВ:
+  - При любом скролле
+  - При любом клике
+  - При скрытии вкладки
+  - При изменении размера окна
+  - После показа попапа (один раз за сессию)
+  
+  ЦЕЛЬ: Показывать попап только когда пользователь активно читает контент,
+  но не мешать взаимодействию с интерфейсом.
+-->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  const section = document.querySelector<HTMLElement>('#features');
-  if (!section) return;
-
   let timerId: number | null = null;
   let hasTriggered = false;
+  let isScrolling = false;
+  let scrollTimeout: number | null = null;
+  let isClicking = false;
+  let clickTimeout: number | null = null;
 
   const startTimer = () => {
-    if (hasTriggered || timerId) return;
-    timerId = window.setTimeout(triggerPopup, 3000) ;
+    if (hasTriggered || timerId || isClicking) return;
+    
+    // Проверяем, что пользователь проскроллил хотя бы на высоту экрана
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+    
+    if (scrollTop < viewportHeight) {
+      return; // Не показываем попап на первом экране
+    }
+    
+    timerId = window.setTimeout(triggerPopup, 14000); // 14 секунд
   };
 
   const cancelTimer = () => {
@@ -336,58 +371,89 @@ document.addEventListener('DOMContentLoaded', () => {
     window.dispatchEvent(new CustomEvent('open-contact-popup'));
 
     cancelTimer();
-    observer.disconnect();
     window.removeEventListener('scroll', onScroll);
     window.removeEventListener('resize', onResize);
     window.removeEventListener('visibilitychange', onVisibilityChange);
-    window.removeEventListener('hashchange', onHashChange);
+    document.removeEventListener('click', onClick);
   };
 
-  
-  const debounce = <T extends (...args: any[]) => void>(fn: T, wait: number) => {
-    let timeout: number | null = null;
-    return (...args: Parameters<T>) => {
-      if (timeout) clearTimeout(timeout);
-      timeout = window.setTimeout(() => fn(...args), wait);
-    };
+  const onScroll = () => {
+    isScrolling = true;
+    
+    // Отменяем предыдущий таймер скролла
+    if (scrollTimeout) {
+      clearTimeout(scrollTimeout);
+    }
+    
+    // Запускаем новый таймер - если через 2 секунды скролл остановится
+    scrollTimeout = window.setTimeout(() => {
+      isScrolling = false;
+      // Если вкладка активна и пользователь не скроллит и не кликает - запускаем основной таймер
+      if (!document.hidden && !isClicking) {
+        startTimer();
+      }
+    }, 2000);
   };
 
-  const onScrollEnd = debounce(() => {
-    const rect = section.getBoundingClientRect();
-    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-    const near = !(rect.bottom < -200 || rect.top > viewportHeight + 200);
-
-    if (near) startTimer();
-    else cancelTimer();
-  }, 150);
-
-  const onScroll = () => onScrollEnd();
-  const onResize = () => onScrollEnd();
-  const onVisibilityChange = () => {
-    if (document.hidden) cancelTimer();
-    else onScrollEnd();
-  };
-  const onHashChange = () => {
+  const onClick = () => {
+    isClicking = true;
+    
+    // Отменяем основной таймер при клике
     cancelTimer();
-    onScrollEnd();
+    
+    // Отменяем предыдущий таймер клика
+    if (clickTimeout) {
+      clearTimeout(clickTimeout);
+    }
+    
+    // Запускаем новый таймер - если через 3 секунды не будет кликов
+    clickTimeout = window.setTimeout(() => {
+      isClicking = false;
+      // Если вкладка активна и пользователь не скроллит - запускаем основной таймер
+      if (!document.hidden && !isScrolling) {
+        startTimer();
+      }
+    }, 3000);
   };
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      const entry = entries[0];
-      if (entry.isIntersecting && !hasTriggered) startTimer();
-      else cancelTimer();
-    },
-    { threshold: 0.0, rootMargin: '400px 0px 400px 0px' }
-  );
+  const onResize = () => {
+    // При изменении размера окна отменяем таймеры
+    cancelTimer();
+    if (scrollTimeout) {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = null;
+    }
+    if (clickTimeout) {
+      clearTimeout(clickTimeout);
+      clickTimeout = null;
+    }
+  };
 
-  observer.observe(section);
-  window.addEventListener('scroll', onScroll, { passive: true });
+  const onVisibilityChange = () => {
+    if (document.hidden) {
+      // Если вкладка скрыта - отменяем все таймеры
+      cancelTimer();
+      if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = null;
+      }
+      if (clickTimeout) {
+        clearTimeout(clickTimeout);
+        clickTimeout = null;
+      }
+    } else {
+      // Если вкладка стала активной и пользователь не скроллит и не кликает - запускаем таймер
+      if (!isScrolling && !isClicking) {
+        startTimer();
+      }
+    }
+  };
+
+  // Запускаем отслеживание скролла и кликов
+  window.addEventListener('scroll', onScroll);
   window.addEventListener('resize', onResize);
   window.addEventListener('visibilitychange', onVisibilityChange);
-  window.addEventListener('hashchange', onHashChange);
-
-  onScrollEnd();
+  document.addEventListener('click', onClick);
 });
 
 </script>

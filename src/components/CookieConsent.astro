@@ -55,7 +55,7 @@ const addNoscriptPixel = (): void => {
 };
 
 const yandexMetrika = (): void => {
-  if (!hasConsented() || yandexInitialized) return;
+  if (yandexInitialized) return;
   yandexInitialized = true;
   addNoscriptPixel();
 
@@ -96,7 +96,7 @@ const addMailruNoscriptPixel = (): void => {
 };
 
 const mailruCounter = (): void => {
-  if (!hasConsented() || mailruInitialized) return;
+  if (mailruInitialized) return;
   mailruInitialized = true;
   addMailruNoscriptPixel();
 
@@ -134,17 +134,13 @@ if (overlay) {
 cookieButton?.addEventListener('click', () => {
   overlay?.classList.remove('active');
   localStorage.setItem(COOKIE_AGREED_KEY, 'true');
-  yandexMetrika();
-  mailruCounter();
-
   removeBodyPadding();
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  if (hasConsented()) {
-    yandexMetrika();
-    mailruCounter();
-  }
+  // Запускаем аналитику сразу при загрузке страницы
+  yandexMetrika();
+  mailruCounter();
 });
 </script>
 
