@@ -44,15 +44,23 @@ import WORKDECOR from '../assets/img/work-decor.webp';
   <!-- YourSpace intro -->
   <section class="home-page-main">
     <div class="layout">
-      <h1>
-        YourSpace -
-        <span class="title-blue">умный дом, который объединяет всё!</span>
-      </h1>
-      <div class="home-page-main__text">
-        <p>Устройства любых экосистем в одном приложении и сценарии, разработанные для Вас</p>
-        <div class="home-page-main__hass-block">
-          <Image src={HASS} alt="home assistant logo" />
-          <p><span>Работает на</span> Home Assistant</p>
+      <div class="home-page-main__grid">
+        <div class="home-page-main__content">
+          <h1>YourSpace -
+            <span class="title-sub">умный дом, который объединяет всё!</span>
+          </h1>
+          <div class="home-page-main__text">
+            <p>Устройства любых экосистем<br/> в одном приложении и сценарии,<br/> разработанные для Вас</p>
+            
+            <div class="section-offer">
+              <p><a href="#" class="text-blue popup-trigger">Умный свет</a> в 2-к кв. под ключ + 2 сценария</p>
+              <p class="section-offer-subtitle"><a href="#" class="text-blue popup-trigger">Без штробления и сверления</a></p>
+              <button class="button glancing popup-trigger">от 45 тысяч рублей</button>
+            </div>
+          </div>
+        </div>
+        <div class="home-page-main__image popup-trigger">
+          <Image src={SHFEATURES4} alt="Умный дом" />
         </div>
       </div>
     </div>
@@ -527,50 +535,64 @@ document.addEventListener('DOMContentLoaded', () => {
   .home-page-main {
     width: 100%;
     overflow: hidden;
-    margin-bottom: var(--space-section);
-    padding-top: var(--space);
   }
 
   .home-page-main .layout {
     position: relative;
   }
 
-  .home-page-main .layout::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: calc(var(--space) - 14px);
-    width: 50%;
-    height: 100%;
-    background-image: url('../assets/img/hass-decor-image.webp');
-    background-repeat: no-repeat;
-    background-position: bottom right;
-    background-size: contain;
-    z-index: 0;
+  .home-page-main__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space);
+    align-items: center;
+    min-height: 60vh;
+  }
+
+  .home-page-main__image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  .home-page-main__image:hover {
+    transform: scale(1.02);
+  }
+
+  .home-page-main__image img {
+    max-width: 100%;
+    height: auto;
   }
 
   .home-page-main__text {
     position: relative;
-    max-width: 465px;
+    max-width: 580px;
     z-index: 1;
   }
 
   .home-page-main__text p {
     font-weight: 500;
     margin-bottom: var(--space);
+    line-height: 1.2;
   }
 
   .home-page-main__hass-block {
     display: flex;
-    align-items: center;
-    gap: calc(var(--space) * 1.4);
-    margin-top: calc(var(--space)*1.5);
+    align-items: start;
+    gap: var(--space);
+  }
+
+  .home-page-main__hass-block img {
+    max-width: 40px;
   }
 
   .home-page-main__hass-block p {
     margin-bottom: 0;
-    font-size: calc(var(--base-font-size) * 1.5);
-    line-height: 1.2;
+    font-size: calc(var(--base-font-size) * 0.9);
+    line-height: 1;
+    font-weight: bold;
   }
 
   .home-page-main__hass-block span {
@@ -805,12 +827,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* media queries */
 
+  @media screen and (max-width: 1200px) {
+    .home-page-main__grid {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+
   @media screen and (max-width: 990px) {
-    .home-page-main .layout::after  {
-      display: block;
-      position: static;
-      width: 100%;
-      height: 330px;
+    .home-page-main__grid {
+      grid-template-columns: 1fr;
+      gap: calc(var(--space) * 0.5);
+      min-height: auto;
+    }
+    
+    .home-page-main__image {
+      order: -1;
+      margin-bottom: var(--space);
     }
   }
 
@@ -898,5 +930,23 @@ document.addEventListener('DOMContentLoaded', () => {
     .plan .home-page__link  {
       text-align: center;
     }
+  }
+
+  .section-offer {
+    margin-bottom: var(--space);
+  }
+
+  .section-offer p {
+    margin-bottom: 0;
+    font-weight: bold;
+    font-size: calc(var(--base-font-size) * 1.1);
+  }
+
+  .section-offer p.section-offer-subtitle {
+    font-size: 0.8em;
+  }
+
+  .section-offer .button {
+    margin-top: calc(var(--space)*0.5);
   }
 </style>

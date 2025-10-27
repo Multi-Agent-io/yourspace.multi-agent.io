@@ -131,6 +131,12 @@ p:last-child, ul:last-child, ol:last-child, blockquote:last-child, table:last-ch
   font-variation-settings: var(--font-flex-italic-light);
 }
 
+h1 .title-sub {
+  font-size: 0.4em;
+  font-variation-settings: var(--font-flex-bold);
+  text-transform: uppercase;
+}
+
 /* link with arrow */
 .link-with-arrow {
   display: inline-block;
@@ -215,3 +221,15 @@ p:last-child, ul:last-child, ol:last-child, blockquote:last-child, table:last-ch
   }
 }
 
+.text-blue {
+  color: var(--text-accent);
+}
+
+a.text-blue:hover {
+  color: var(--text-accent);
+  text-decoration: underline;
+}
+
+.text-small {
+  font-size: 0.8em;
+}

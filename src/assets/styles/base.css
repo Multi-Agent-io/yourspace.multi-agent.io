@@ -37,6 +37,48 @@ button {
   cursor: pointer;
 }
 
+.button {
+  padding: calc(var(--space) * 0.3) calc(var(--space) * 0.7);
+  font-size: calc(var(--base-font-size));
+  background-color: var(--text-accent);
+  color: #fff;
+  border-radius: var(--space);
+  text-align: center;
+}
+
+.button.glancing {
+  position: relative;
+  overflow: hidden;
+}
+
+button.button.glancing::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: glancing-shine 3s ease-in-out infinite;
+}
+
+@keyframes glancing-shine {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
 
 .layout {
 	max-width: var(--content-width);
