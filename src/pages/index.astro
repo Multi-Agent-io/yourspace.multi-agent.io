@@ -13,7 +13,7 @@ import CatOnVacuum from '../components/CatOnVacuum.astro';
 import Popup from '../components/Popup.astro';
 
 // images
-import HASS from '../assets/img/hass-logo.svg';
+// import HASS from '../assets/img/hass-logo.svg';
 
 import MESSAGEDECOR from '../assets/img/message-decor.webp';
 
@@ -60,7 +60,7 @@ import WORKDECOR from '../assets/img/work-decor.webp';
           </div>
         </div>
         <div class="home-page-main__image popup-trigger">
-          <Image src={SHFEATURES4} alt="Умный дом" />
+          <Image src={SHFEATURES1} alt="Умный дом" />
         </div>
       </div>
     </div>
@@ -325,12 +325,12 @@ import WORKDECOR from '../assets/img/work-decor.webp';
   2. Пользователь не скроллит 2+ секунд
   3. Пользователь не кликает 3+ секунд  
   4. Вкладка активна (не скрыта)
-  5. Прошло 14 секунд с момента последней активности
+  5. Прошло 8 секунд с момента последней активности
   
   ТАЙМЕРЫ:
   - 2 сек - пауза в скролле (если пользователь перестал скроллить)
   - 3 сек - пауза в кликах (если пользователь перестал кликать)
-  - 14 сек - основной таймер показа попапа
+  - 8 сек - основной таймер показа попапа
   
   ОТМЕНА ТАЙМЕРОВ:
   - При любом скролле
@@ -362,7 +362,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return; // Не показываем попап на первом экране
     }
     
-    timerId = window.setTimeout(triggerPopup, 14000); // 14 секунд
+    timerId = window.setTimeout(triggerPopup, 8000); // 8 секунд
   };
 
   const cancelTimer = () => {
