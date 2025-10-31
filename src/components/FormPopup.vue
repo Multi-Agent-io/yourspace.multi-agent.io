@@ -37,7 +37,7 @@
           @verify="sendEmail"
         />
         <h2>Консультация и замер - бесплатно</h2>
-        <a href="https://t.me/MultiAgent_io" class="text-blue telegram-link" target="_blank">
+        <a href="https://t.me/MultiAgent_io" class="button-light" target="_blank">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
             <path d="m12 24c6.629 0 12-5.371 12-12s-5.371-12-12-12-12 5.371-12 12 5.371 12 12 12zm-6.509-12.26 11.57-4.461c.537-.194 1.006.131.832.943l.001-.001-1.97 9.281c-.146.658-.537.818-1.084.508l-3-2.211-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953z"/>
           </svg>
@@ -197,27 +197,6 @@ h2 {
   line-height: 1.2;
   font-size: 1.8rem;
   margin-bottom: 1rem;
-}
-
-.telegram-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
-  margin-bottom: 1rem;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  background: rgba(0, 123, 255, 0.1);
-  transition: all 0.3s ease;
-}
-
-.telegram-link:hover {
-  background: rgba(0, 123, 255, 0.2);
-  transform: translateY(-1px);
-}
-
-.telegram-link svg {
-  flex-shrink: 0;
 }
 
 form {

@@ -27,13 +27,6 @@ body {
   --content-width: 1300px;
 }
 
-body.dark {
-	--color-dark: #ffffff;
-	--color-light: #191919;
-	--text-color: var(--color-dark);
-}
-
-
 @media screen and (max-width: 450px) {
 	body {
 		--space: 1.2rem;

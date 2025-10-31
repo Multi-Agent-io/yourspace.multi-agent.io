@@ -1,10 +1,15 @@
 <template>
   <header>
     <div class="layout">  
-      <a :href="mainUrl" class="header__logo" aria-label="YourSpace главная страница">
-        <img :src="logo.src" alt="YourSpace logo" />
-      </a>
-      <nav class="nav" :class="{'active': isOpen}" role="menu">
+      <div class="header-left">
+        <a :href="mainUrl" class="header__logo" aria-label="YourSpace главная страница" title="YourSpace">
+          <img :src="logo.src" alt="YourSpace logo" />
+        </a>
+        <span class="element-location">Умный дом в Санкт-Петербурге и ЛО</span>
+      </div>
+
+      <div class="header-right">
+        <nav class="nav" :class="{'active': isOpen}" role="menu">
         <ul class="nav__list">
           <li class="nav__item" @click="closeMenu">
             <a :href="featuresUrl" aria-label="Перейти к разделу 'Возможности'" class="link">Возможности</a>
@@ -18,51 +23,30 @@
           <li class="nav__item">
             <a :href="aboutUsUrl" aria-label="Узнать больше о нас">О&nbsp;нас</a>
           </li>
-          <li class="nav__item link-remote">
-            <button class="popup-trigger" aria-label="Оставить заявку" >Получить карту в подарок</button>
-          </li>
-          <li class="nav__item nav__item--tg">
-            <a href="https://t.me/MultiAgent_io" class="home-page__link--tg" target="_blank" aria-label="Запланировать замер для вашего умного дома"></a>
-          </li>
         </ul>
       </nav>
-      <button class="header__btn"  @click="() => toggleMenu()" aria-label="Открыть/закрыть меню" :aria-expanded="isOpen.toString()">
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-          class="burger-icon"
-        >
-          <path
-            :class="{ 'line1': true, open: isOpen }"
-            d="M3 7h18"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-          />
-          <path
-            :class="{ 'line2': true, open: isOpen }"
-            d="M3 12h18"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-          />
-          <path
-            :class="{ 'line3': true, open: isOpen }"
-            d="M3 17h18"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-          />
+
+      <button class="button-light" @click="openPopup">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="m12 24c6.629 0 12-5.371 12-12s-5.371-12-12-12-12 5.371-12 12 5.371 12 12 12zm-6.509-12.26 11.57-4.461c.537-.194 1.006.131.832.943l.001-.001-1.97 9.281c-.146.658-.537.818-1.084.508l-3-2.211-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.121l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953z"/>
         </svg>
+        <b class="element-btncontact-text">Есть контакт</b>
       </button>
+
+      <button class="header__btn" @click="toggleMenu" aria-label="Открыть меню">
+        <span :class="{'open': isOpen}" class="line1"></span>
+        <span :class="{'open': isOpen}" class="line2"></span>
+        <span :class="{'open': isOpen}" class="line3"></span>
+      </button>
+
+      </div>
+      
     </div>
   </header>
 </template>
 
 <script lang="ts" setup>
-import logo from 'src/assets/img/logo.svg';
+import logo from 'src/assets/img/YourSpace-logo.png';
 import { withBase } from '../utils/withBase';
 
 import { ref } from 'vue';
@@ -81,23 +65,43 @@ const aboutUsUrl = withBase('/about-us/');
 const featuresUrl = withBase('/#features');
 const casesUrl = withBase('/#cases');
 const stepsUrl = withBase('/#steps');
-const mainUrl = withBase('/')
+const mainUrl = withBase('/');
+
+const openPopup = (): void => {
+  window.dispatchEvent(new CustomEvent('open-contact-popup'));
+};
 </script>
 
-<style scoped> 
+<style scoped>
+
+  header {
+    font-size: calc(var(--base-font-size) * 0.8);
+    font-variation-settings: var(--font-flex-medium);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: #fff;
+  }
+
+  .header-left, header .layout, .header-right {
+    display: flex;
+    gap: var(--space);
+    align-items: center;
+  }
 
   header .layout {
-    display: flex;
-    align-items: center;
     justify-content: space-between;
-    gap: calc(var(--space) * 0.5);
+    align-items: center;
+    padding: calc(var(--space) * 0.4) var(--space);
+  }
+
+  .header__logo {
+    display: block;
+    width: 50px;
   }
 
   .header__logo img {
-    width: auto;
-    height: auto;
     max-width: 100%;
-    max-height: 100%;
   }
 
   .nav__list {
@@ -172,6 +176,19 @@ const mainUrl = withBase('/')
     display: none;
    }
 
+   .button-light {
+    font-size: 0.9rem;
+   }
+
+   .header-right a {
+    color: var(--text-accent);
+   }
+
+   .button-light {
+    text-align: left;
+   }
+
+  /* hamburger button (hidden by default) */
   .header__btn  {
     display: none;
     background: none;
@@ -184,94 +201,69 @@ const mainUrl = withBase('/')
     z-index: 1001;
   }
 
-  .header__btn path {
-    color: var(--color-dark);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.33s ease-in;
-    transform-origin: center;
+  .header__btn .line1,
+  .header__btn .line2,
+  .header__btn .line3 {
+    position: absolute;
+    left: 50%;
+    width: 24px;
+    height: 3px;
+    background: var(--color-dark);
+    border-radius: 2px;
+    transform: translate(-50%, -50%);
+    transition: transform 0.25s ease, opacity 0.25s ease, top 0.25s ease;
   }
 
-  .line1.open {
-    transform: translateY(3px) rotate(45deg);
+  .header__btn .line1 { top: 14px; }
+  .header__btn .line2 { top: 20px; }
+  .header__btn .line3 { top: 26px; }
+
+  .header__btn .line1.open { top: 20px; transform: translate(-50%, -50%) rotate(45deg); }
+  .header__btn .line2.open { opacity: 0; }
+  .header__btn .line3.open { top: 20px; transform: translate(-50%, -50%) rotate(-45deg); }
+
+
+  @media screen and (max-width: 1120px) {
+    .nav {
+      display: none; /* hide by default */
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 100svh;
+      padding: var(--space);
+      background-color: var(--color-light);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      opacity: 0;
+      transform: translateX(-150%);
+      transition: transform 0.7s ease-in-out, opacity 0.5s ease-in-out;
+      z-index: 5;
+      overflow: hidden;
+    }
+
+    .nav.active { display: flex; opacity: 1; transform: translateX(0); }
+
+    .nav__list {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .nav__item a,
+    .nav__item button  { font-size: var(--base-font-size); }
+
+    .header__btn { display: flex; }
   }
 
-  .line2.open {
-    opacity: 0;
+  @media screen and (max-width: 480px) {
+    .element-location {
+      font-size: 80%;
+    }
+
+    .element-btncontact-text {
+      display: none;
+    }
   }
-
-  .line3.open {
-    transform: translateY(-4px) rotate(-45deg);
-  }
-
-  .header__btn:hover path {
-    stroke: var(--text-accent);
-  }
-
-  /* dark mode */
-  .dark header img {
-    filter: invert(100%);
-  }
-
-
-   @media screen and (max-width: 1320px) {
-      .nav__list {
-        font-size: calc(var(--base-font-size) * 0.8);
-        gap: var(--space)
-      }
-   }
-
-    @media screen and (max-width: 1170px) {
-      .nav__list {
-        gap: var(--space);
-        text-align: center;
-      }
-
-      .nav__item a,
-      .nav__item button {
-        font-size: calc(var(--base-font-size) * 0.7);
-      }
-   }
-
-    @media screen and (max-width: 950px) {
-      .nav {
-        display: flex;
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        height: 80svh;
-        padding: calc(var(--space) * 2) var(--space);
-        background-color:var(--color-light);
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        opacity: 0;
-        transform: translateX(-150%);
-        transition: transform 0.7s ease-in-out, opacity 0.5s ease-in-out;
-        z-index: 5;
-        overflow: hidden;
-      }
-
-      .nav.active {
-        opacity: 1;
-        transform: translateX(0);
-        
-      }
-
-      .nav__list {
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        overflow: hidden;
-      }
-
-      .nav__item a,
-      .nav__item button  {
-        font-size: var(--base-font-size) ;
-      }
-
-      .header__btn {
-        position: relative;
-        display: flex;
-        z-index: 10;
-      }
-   }
 </style>

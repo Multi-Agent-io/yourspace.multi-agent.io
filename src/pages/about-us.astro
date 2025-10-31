@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
+import { withBase } from '@/utils/withBase';
 
 import IOT from '../assets/img/multi-agent-systems.webp';
 import DECOR1 from '../assets/img/about-us-1.webp';
@@ -8,21 +9,29 @@ import DECOR2 from '../assets/img/about-us-2.webp';
 ---
 
 <Layout
-  title="О нас / YourSpace"
-  description="Узнайте больше о мультиагентных системах и YourSpace"
-  isDark
+  title="О нас - YourSpace | Умный дом в СПб от профессионалов IoT"
+  description="YourSpace - умный дом в Санкт-Петербурге от профессионалов IoT. Автоматизация без ремонта. Все бренды в одном приложении. Гарантия 1 год, консультация и замер бесплатно."
 >
 
-  <!-- Multi-agents systems -->
   <section class="mas">
     <div class="layout">
-      <h1>Мультиагентные системы -</h1>
-      <div class="wrapper"> 
-        <p class="title-blue mas__descr">
-          <span class="title-blue--light">Это команда профессионалов с многолетним опытом в IoT и умных домах.</span> <b>Мы знаем, как сделать домашнюю жизнь комфортнее, эстетичнее и безопаснее.</b></p>
-        <div class="decor-image">
+      <div class="mas__grid">
+        <div class="mas__content">
+          <h1>О нас</h1>
+          <p class="mas__descr">
+            <span class="title-blue--light">YourSpace - это команда профессионалов с многолетним опытом в IoT и умных домах.</span> <b>Мы знаем, как сделать домашнюю жизнь комфортнее, эстетичнее и безопаснее.</b></p>
+        </div>
+        <div class="mas__image">
           <Image src={IOT} alt="iot solutions"/>
         </div>
+      </div>
+
+      <!-- вот тут видео -->
+      <div class="about-video">
+        <video controls preload="none" poster={withBase("/video/YourSpace-About-Small-Preview.webp")}>
+          <source src={withBase("/video/YourSpace-About-Small.mp4")} type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
       </div>
 
       <div class="wrapper"> 
@@ -33,7 +42,7 @@ import DECOR2 from '../assets/img/about-us-2.webp';
           <p>Наша философия заключается в том, что умный дом не должен отвлекать вас от дел постоянной необходимостью использовать телефон или панель, поэтому мы проектируем систему так, чтобы она подстраивалась под ваши привычки. Но и красивые панели и голосовое управление остаются доступны! При этом данные хранятся локально, так что никто не сможет за вами “подглядывать”.</p>
           <p>Мы работаем по Санкт-Петербургу и Ленинградской области, возможны выезды в другие регионы. Работа по договору, оплата по карте. </p>
 
-          <div class="title-blue">
+          <div class="title-blue popup-trigger">
             <span>Гарантия - 1 год.</span>
             Поддержка - навсегда!
           </div>
@@ -42,13 +51,13 @@ import DECOR2 from '../assets/img/about-us-2.webp';
     </div>
   </section>
 
-  <!-- Contacts-->
+
   <section id="contacts" class="contacts">
     <div class="layout">
       <h2>Узнайте, каким будет <span>Ваш личный умный дом</span></h2>
       <div class="wrapper">
         <div class="contacts__content">
-          <div class="title-blue">
+          <div class="title-blue popup-trigger">
             <span>Получите консультацию</span>
             и запланируйте замер
           </div>
@@ -104,21 +113,23 @@ import DECOR2 from '../assets/img/about-us-2.webp';
     overflow: hidden;
   }
 
-  .mas .decor-image:not(.decor-image--second) {
-    max-width: 700px;
-    width: 100%;
+  .mas__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space);
+    align-items: center;
     min-height: 60vh;
-    height: 100%;
   }
 
-  .mas .decor-image:not(.decor-image--second) img {
-    position: absolute;
-    top: 15vh;
-    right: 0;
-    bottom: 0;
-    width: 50vw; 
-    object-fit: cover;
-    z-index: 0;
+  .mas__image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .mas__image img {
+    max-width: 100%;
+    height: auto;
   }
 
   .mas__descr {
@@ -132,6 +143,28 @@ import DECOR2 from '../assets/img/about-us-2.webp';
 
   .mas__text .title-blue span, .contacts .title-blue span {
     display: block;
+  }
+
+  .title-blue.popup-trigger {
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+
+  .title-blue.popup-trigger:hover {
+    opacity: 0.8;
+  }
+
+  .about-video {
+    margin: calc(var(--space) * 2) 0;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .about-video video {
+    width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
   }
 
   .mas__feecc {
@@ -211,6 +244,24 @@ import DECOR2 from '../assets/img/about-us-2.webp';
 
   /* media queries */
 
+  @media screen and (max-width: 1200px) {
+    .mas__grid {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
+
+  @media screen and (max-width: 990px) {
+    .mas__grid {
+      grid-template-columns: 1fr;
+      gap: calc(var(--space) * 0.5);
+      min-height: auto;
+    }
+    
+    .mas__image {
+      display: none;
+    }
+  }
+
   @media screen and (max-width: 800px) {
     .wrapper {
       grid-template-columns:  1fr;
@@ -218,16 +269,6 @@ import DECOR2 from '../assets/img/about-us-2.webp';
 
     .decor-image--second {
       order: 1;
-    }
-
-    .mas .decor-image:not(.decor-image--second) {
-      max-width: unset;
-      min-height: unset;
-    }
-
-    .mas .decor-image:not(.decor-image--second) img {
-      position: static;
-      width: 100%;
     }
   }
 

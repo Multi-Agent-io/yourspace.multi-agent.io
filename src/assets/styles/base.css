@@ -37,13 +37,35 @@ button {
   cursor: pointer;
 }
 
-.button {
-  padding: calc(var(--space) * 0.3) calc(var(--space) * 0.7);
-  font-size: calc(var(--base-font-size));
+.button, .button-light {
+  /* padding: calc(var(--space) * 0.3) calc(var(--space) * 0.7); */
+  padding: 0.5rem 1rem;
+  font-size: var(--base-font-size);
   background-color: var(--text-accent);
   color: #fff;
-  border-radius: var(--space);
+  border-radius: 0.5rem;
   text-align: center;
+  box-sizing: border-box;
+}
+
+.button-light {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  background: rgba(0, 123, 255, 0.1);
+  transition: all 0.3s ease;
+  color: var(--text-accent);
+}
+
+.button-light:hover {
+  background: rgba(0, 123, 255, 0.2);
+  transform: translateY(-1px);
+  color: var(--text-accent) !important;
+}
+
+.button-light svg {
+  flex-shrink: 0;
 }
 
 .button.glancing {

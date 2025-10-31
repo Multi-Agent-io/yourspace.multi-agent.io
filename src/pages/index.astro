@@ -38,6 +38,14 @@ import VOICEASSISTANT from '../assets/img/voice-assistant.webp';
 
 import WORKDECOR from '../assets/img/work-decor.webp';
 
+// brand logos
+import logoAlisa from '../assets/img/brands/Alisa_Yandex.svg';
+import logoTuya from '../assets/img/brands/tuya.svg';
+import logoXiaomi from '../assets/img/brands/xiaomi.svg';
+import logoIrobotShort from '../assets/img/brands/irobot-short.svg';
+import logoAqara from '../assets/img/brands/aqara.svg';
+import logoSonoff from '../assets/img/brands/sonoff.svg';
+
 ---
 
 <Layout>
@@ -50,7 +58,7 @@ import WORKDECOR from '../assets/img/work-decor.webp';
             <span class="title-sub">умный дом, который объединяет всё!</span>
           </h1>
           <div class="home-page-main__text">
-            <p>Устройства любых экосистем<br/> в одном приложении и сценарии,<br/> разработанные для Вас</p>
+            <!-- <p>Устройства любых экосистем<br/> в одном приложении и сценарии,<br/> разработанные для Вас</p> -->
             
             <div class="section-offer">
               <p><a href="#" class="text-blue popup-trigger">Умный свет</a> в 2-к кв. под ключ + 2 сценария</p>
@@ -65,6 +73,20 @@ import WORKDECOR from '../assets/img/work-decor.webp';
       </div>
     </div>
   </section>
+
+  <div class="header-brands">
+    <div class="layout">
+      <div>Все бренды в одном приложении у вас дома</div>
+      <div class="header-brands-logos">
+        <Image src={logoAlisa} alt="Яндекс Алиса" />
+        <Image src={logoXiaomi} alt="Xiaomi" />
+        <Image src={logoTuya} alt="Tuya" />
+        <Image src={logoSonoff} alt="Sonoff" />
+        <Image src={logoIrobotShort} alt="iRobot" />
+        <Image src={logoAqara} alt="Aqara" /> 
+      </div>
+    </div>
+  </div>
 
   <!-- video section -->
   <section class="section-blue video">
@@ -933,7 +955,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   .section-offer {
-    margin-bottom: var(--space);
+    margin-top: calc(var(--space) * 2);
+    margin-bottom: calc(var(--space) * 2);
   }
 
   .section-offer p {
@@ -949,4 +972,59 @@ document.addEventListener('DOMContentLoaded', () => {
   .section-offer .button {
     margin-top: calc(var(--space)*0.5);
   }
+
+  @media screen and (width < 470px) {
+    .button.glancing {
+      width: 100%;
+    }
+
+    .section-offer {
+      margin-bottom: calc(var(--space) * 4);
+    }
+
+    .home-page-main__image {
+      max-width: 80%;
+      margin: calc(var(--space) * 3) auto var(--space);
+    }
+  }
+
+  .header-brands{
+    border-width: 1px 0;
+    border-style: solid;
+    border-color: #000;
+   }
+
+  
+   .header-brands .layout {
+    display: flex;
+    gap: var(--space);
+    justify-content: center;
+    align-items: center;
+    padding: 5px var(--space);
+   }
+
+   .header-brands-logos {
+    display: flex;
+    gap: calc(var(--space) * 0.5);
+    align-content: center;
+    /* margin-top: 5px; */
+    /* filter: grayscale(); */
+   }
+
+   .header-brands-logos img,
+   .header-brands-logos :global(img) {
+    max-height: 1rem;
+    width: auto;
+    height: auto;
+   }
+   
+   @media screen and (width < 620px) {
+    .header-brands .layout {
+      flex-direction: column;
+      gap: 1px;
+      align-items: center;
+      padding-top: calc(var(--space) * 0.5);
+      padding-bottom: calc(var(--space) * 0.5);
+    }
+   }
 </style>
