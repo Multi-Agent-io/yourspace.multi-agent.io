@@ -1,4 +1,5 @@
 # yourspace.multi-agent.io
+
 YourSpace - Ваш Умный Дом
 
 ## For Developers
@@ -11,11 +12,11 @@ YourSpace - Ваш Умный Дом
 
 Ensure you have Node.js and the [Astro framework](https://astro.build/) installed before proceeding.
 
-- **Install dependencies:** 
-`yarn install`
+- **Install dependencies:**
+  `yarn install`
 
 - **Start development server**
-`yarn dev`
+  `yarn dev`
 
 - **Build for production**
-`yarn build`
+  `yarn build`
