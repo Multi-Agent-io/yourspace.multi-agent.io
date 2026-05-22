@@ -22,7 +22,7 @@
             <button class="popup-trigger" aria-label="Оставить заявку" >Получить карту в подарок</button>
           </li>
           <li class="nav__item nav__item--tg">
-            <a href="https://t.me/MultiAgent_io" class="home-page__link--tg" target="_blank" aria-label="Запланировать замер для вашего умного дома"></a>
+            <a href="https://t.me/PaTara43" class="home-page__link--tg" target="_blank" aria-label="Запланировать замер для вашего умного дома"></a>
           </li>
         </ul>
       </nav>
