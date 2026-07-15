@@ -1,0 +1,351 @@
+---
+import { SwiperSlide } from "astro-swiper";
+import { Image } from 'astro:assets';
+
+import Layout from '../layouts/Layout.astro';
+import SwiperComponent from '../components/SwiperComponent.astro';
+import CaseList from '../components/CaseList.astro';
+
+import { automations, categoryLabels, type AutomationCategory } from '../data/automationsData';
+import { casesFeatures } from '../data/caseData';
+import { caseImages } from '../data/caseImages';
+
+const tabs: { key: 'popular' | 'all' | AutomationCategory; label: string }[] = [
+  { key: 'popular', label: 'Популярное' },
+  { key: 'all', label: 'Все' },
+  { key: 'light', label: categoryLabels.light },
+  { key: 'climate', label: categoryLabels.climate },
+  { key: 'devices', label: categoryLabels.devices },
+  { key: 'security', label: categoryLabels.security },
+  { key: 'media', label: categoryLabels.media },
+];
+
+const formatPrice = (price: number) => new Intl.NumberFormat('ru-RU').format(price);
+---
+
+<Layout
+  title="Автоматизации и цены - YourSpace | Каталог сценариев умного дома в СПб"
+  description="Каталог автоматизаций умного дома YourSpace с ценами: приветственный свет, тёплый пол по утрам, режим охраны, голосовое управление и другие сценарии. Примеры реальных проектов."
+>
+  <section class="automations">
+    <div class="layout">
+      <h1>Автоматизации и цены</h1>
+      <p class="automations__intro">
+        Сценарии, которые мы чаще всего собираем для клиентов. Любой можно адаптировать
+        под вашу квартиру или дом — а если нужного нет в списке, придумаем вместе.
+      </p>
+      <p class="automations__disclaimer">
+        В стоимость входят работы и настройка сценариев. Оборудование оплачивается отдельно.
+      </p>
+
+      <div class="automations__tabs" role="tablist" aria-label="Категории автоматизаций">
+        {tabs.map((tab, index) => (
+          <button
+            class={`automations__tab ${index === 0 ? 'automations__tab--active' : ''}`}
+            data-tab={tab.key}
+            role="tab"
+            aria-selected={index === 0 ? 'true' : 'false'}
+          >{tab.label}</button>
+        ))}
+      </div>
+
+      <div class="automations__grid">
+        {automations.map((item) => (
+          <article
+            class="card automation-card"
+            data-category={item.category}
+            data-popular={item.popular ? 'true' : 'false'}
+          >
+            <span class="automation-card__category">{categoryLabels[item.category]}</span>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+            {item.includes && (
+              <details class="automation-card__includes">
+                <summary>Состоит из</summary>
+                <ul>
+                  {item.includes.map((part) => <li>{part}</li>)}
+                </ul>
+              </details>
+            )}
+            <div class="automation-card__footer">
+              {item.price ? (
+                <div class="automation-card__price">
+                  <span class="automation-card__price-value">
+                    {item.priceFrom && 'от '}{formatPrice(item.price)} ₽
+                  </span>
+                  {item.priceNote && <span class="automation-card__price-note">{item.priceNote}</span>}
+                </div>
+              ) : (
+                <button class="automation-card__ask popup-trigger">Узнать цену</button>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div class="automations__cta">
+        <p>Не нашли нужный сценарий или хотите собрать свой набор?</p>
+        <button class="button glancing popup-trigger">Обсудить проект</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cases -->
+  <section id="cases" class="automations-cases section-blue">
+    <div class="layout">
+      <h2>Примеры проектов</h2>
+      <SwiperComponent slides={3} cls="image-swiper" buttons>
+        {caseImages.map((img) => (
+          <SwiperSlide>
+            <div class="image-slide">
+              <Image src={img.src} alt={img.alt} loading="lazy" />
+            </div>
+          </SwiperSlide>
+        ))}
+      </SwiperComponent>
+
+      <SwiperComponent slides={2} cls="slides-grid" loop={false} useGrid long>
+        {casesFeatures.map((caseData) => (
+          <SwiperSlide>
+            <div class="automations-cases__info">
+              <h3 class="title-blue">{caseData.title}</h3>
+
+              <h4>Результат:</h4>
+              <CaseList items={caseData.items} initialVisible={4} />
+
+              <h4>Стоимость проекта:</h4>
+              <span class="title-blue">{caseData.price}</span>
+            </div>
+          </SwiperSlide>
+        ))}
+      </SwiperComponent>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const tabButtons = document.querySelectorAll<HTMLButtonElement>('.automations__tab');
+  const cards = document.querySelectorAll<HTMLElement>('.automation-card');
+
+  tabButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const tab = button.dataset.tab;
+
+      tabButtons.forEach((other) => {
+        const isActive = other === button;
+        other.classList.toggle('automations__tab--active', isActive);
+        other.setAttribute('aria-selected', String(isActive));
+      });
+
+      cards.forEach((card) => {
+        const visible =
+          tab === 'all' ||
+          (tab === 'popular' ? card.dataset.popular === 'true' : card.dataset.category === tab);
+        card.classList.toggle('automation-card--hidden', !visible);
+      });
+    });
+  });
+
+  // стартовое состояние — «Популярное»
+  cards.forEach((card) => {
+    card.classList.toggle('automation-card--hidden', card.dataset.popular !== 'true');
+  });
+</script>
+
+<style is:global>
+  .automations-cases .swiper {
+    margin-bottom: var(--space);
+  }
+</style>
+
+<style>
+  .automations {
+    margin-bottom: var(--space-section);
+  }
+
+  h1 {
+    margin-bottom: var(--space);
+  }
+
+  .automations__intro {
+    max-width: 780px;
+    margin-bottom: var(--space-half);
+  }
+
+  .automations__disclaimer {
+    max-width: 780px;
+    font-size: calc(var(--base-font-size) * 0.9);
+    color: var(--color-green);
+    margin-bottom: calc(var(--space) * 1.5);
+  }
+
+  /* tabs */
+
+  .automations__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--space-half) * 0.75);
+    margin-bottom: calc(var(--space) * 1.5);
+  }
+
+  .automations__tab {
+    padding: 0.5em 1.1em;
+    font-size: calc(var(--base-font-size) * 0.85);
+    font-weight: 500;
+    color: var(--color-dark);
+    background-color: var(--color-blue-link);
+    border-radius: 2em;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  .automations__tab:hover {
+    background-color: var(--color-dark-blue);
+  }
+
+  .automations__tab--active {
+    color: var(--color-light);
+    background-color: var(--text-accent);
+  }
+
+  .automations__tab--active:hover {
+    background-color: var(--text-accent);
+  }
+
+  /* cards */
+
+  .automations__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space);
+    margin-bottom: calc(var(--space) * 2);
+  }
+
+  .automation-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-half);
+  }
+
+  .automation-card--hidden {
+    display: none;
+  }
+
+  .automation-card h3 {
+    margin-bottom: 0;
+    font-size: calc(var(--base-font-size) * 0.95);
+  }
+
+  .automation-card p {
+    font-size: var(--base-font-size);
+    margin-bottom: 0;
+  }
+
+  .automation-card__category {
+    align-self: flex-start;
+    padding: 0.2em 0.8em;
+    font-size: calc(var(--base-font-size) * 0.7);
+    font-weight: 500;
+    color: var(--color-green);
+    background-color: rgba(160, 197, 232, 0.25);
+    border-radius: 2em;
+  }
+
+  .automation-card__includes summary {
+    cursor: pointer;
+    font-size: calc(var(--base-font-size) * 0.85);
+    font-weight: 500;
+    color: var(--text-accent);
+  }
+
+  .automation-card__includes ul {
+    margin: var(--space-half) 0 0 var(--space-half);
+    font-size: calc(var(--base-font-size) * 0.9);
+  }
+
+  .automation-card__includes li {
+    margin-bottom: 0.3em;
+  }
+
+  .automation-card__footer {
+    margin-top: auto;
+    padding-top: var(--space-half);
+  }
+
+  .automation-card__price {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .automation-card__price-value {
+    font-family: var(--font-family-display);
+    font-weight: 600;
+    font-size: calc(var(--base-font-size) * 1.1);
+    color: var(--text-accent);
+  }
+
+  .automation-card__price-note {
+    font-size: calc(var(--base-font-size) * 0.8);
+    color: var(--color-green);
+  }
+
+  .automation-card__ask {
+    padding: 0.45em 1.2em;
+    font-size: calc(var(--base-font-size) * 0.85);
+    font-weight: 500;
+    color: var(--text-accent);
+    background-color: rgba(0, 123, 255, 0.1);
+    border-radius: 0.5rem;
+    transition: background-color 0.25s ease;
+  }
+
+  .automation-card__ask:hover {
+    background-color: rgba(0, 123, 255, 0.2);
+  }
+
+  /* cta */
+
+  .automations__cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space);
+    padding: calc(var(--space) * 1.2);
+    background: var(--gradient-soft);
+    border-radius: var(--radius-card);
+  }
+
+  .automations__cta p {
+    margin-bottom: 0;
+    font-weight: 500;
+  }
+
+  /* cases */
+
+  .automations-cases .swiper-slide {
+    align-items: center;
+  }
+
+  .automations-cases h4 {
+    margin-bottom: calc(var(--space-half) * 0.5);
+  }
+
+  /* media queries */
+
+  @media screen and (max-width: 1100px) {
+    .automations__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 700px) {
+    .automations__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .automations__cta {
+      justify-content: center;
+      text-align: center;
+    }
+  }
+</style>

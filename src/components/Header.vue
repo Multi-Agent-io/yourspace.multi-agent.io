@@ -15,10 +15,13 @@
             <a :href="featuresUrl" aria-label="Перейти к разделу 'Возможности'" class="link">Возможности</a>
           </li>
           <li class="nav__item" @click="closeMenu">
-            <a :href="stepsUrl" aria-label="Перейти к разделу 'Этапы Работы'">Этапы Работы</a>
+            <a :href="pricesUrl" aria-label="Перейти к странице 'Автоматизации и цены'">Цены</a>
           </li>
           <li class="nav__item" @click="closeMenu">
             <a :href="casesUrl" aria-label="Перейти к разделу 'Кейсы'">Кейсы</a>
+          </li>
+          <li class="nav__item" @click="closeMenu">
+            <a :href="stepsUrl" aria-label="Перейти к разделу 'Этапы Работы'">Этапы Работы</a>
           </li>
           <li class="nav__item">
             <a :href="aboutUsUrl" aria-label="Узнать больше о нас">О&nbsp;нас</a>
@@ -63,7 +66,8 @@ const closeMenu = (): void => {
 
 const aboutUsUrl = withBase('/about-us/');
 const featuresUrl = withBase('/#features');
-const casesUrl = withBase('/#cases');
+const pricesUrl = withBase('/automations/');
+const casesUrl = withBase('/automations/#cases');
 const stepsUrl = withBase('/#steps');
 const mainUrl = withBase('/');
 
