@@ -22,8 +22,6 @@ import STEP2 from '../assets/img/step-2.webp';
 import STEP3 from '../assets/img/step-3.webp';
 import STEP4 from '../assets/img/step-4.webp';
 
-import WORKDECOR from '../assets/img/work-decor.webp';
-
 const DEMO_HA_URL = 'https://demo.yourspace.multi-agent.io';
 
 // Фото подхватываются автоматически, как только файлы появятся в src/assets/img/showcase/
@@ -191,7 +189,7 @@ const protocols = [
   <!-- Smart Home features -->
   <section id="features" class="home-page-features">
     <div class="layout">
-      <SwiperComponent buttons>
+      <SwiperComponent buttons autoplay={7000}>
         <SwiperSlide>
           <div class="home-page-features__slide">
             <h2>Возможности умного дома</h2>
@@ -329,48 +327,46 @@ const protocols = [
       <div class="simple-grid">
         <div class="home-page-voice__info">
           <p>
-            Устройства попадают в Алису через наш сервер, поэтому для неё Casambi-светильник,
-            проводной термостат или старый кондиционер — обычные умные устройства.
+            Устройства попадают в Алису через ваш сервер, поэтому для неё Casambi-светильник,
+            проводной термостат или фанкойл — обычные умные устройства.
             Управляйте голосом, из приложения Яндекса и даже из CarPlay.
           </p>
           <ul>
-            <li>Светильники Casambi</li>
-            <li>Проводные термостаты и котлы</li>
-            <li>Кондиционеры без Wi-Fi — через ИК-пульт</li>
+            <li>Светильники Casambi и DALI</li>
+            <li>Редкие и уникальные Zigbee-устройства</li>
+            <li>Проводные системы</li>
             <li>Apple Home и Siri — так же, параллельно</li>
           </ul>
         </div>
-        <div class="home-page-voice__diagram reveal" role="img" aria-label="Схема: устройства подключаются к серверу умного дома, а сервер — к Алисе, Apple Home и приложению">
+        <div class="home-page-voice__diagram reveal" role="img" aria-label="Схема: устройства подключаются к серверу умного дома, а сервер — к Алисе, приложению Яндекса, CarPlay и Apple Home">
           <div class="voice-diagram__col">
             <span class="voice-diagram__chip">Светильник Casambi</span>
-            <span class="voice-diagram__chip">Термостат</span>
-            <span class="voice-diagram__chip">Шторы</span>
-            <span class="voice-diagram__chip">Кондиционер</span>
+            <span class="voice-diagram__chip">Светильник DALI</span>
+            <span class="voice-diagram__chip">Zigbee-устройство</span>
+            <span class="voice-diagram__chip">Проводной термостат</span>
+            <span class="voice-diagram__chip">Фанкойл</span>
           </div>
           <div class="voice-diagram__link" aria-hidden="true"></div>
           <div class="voice-diagram__hub">Сервер умного дома</div>
           <div class="voice-diagram__link" aria-hidden="true"></div>
           <div class="voice-diagram__col">
             <span class="voice-diagram__chip voice-diagram__chip--accent">Алиса</span>
+            <span class="voice-diagram__chip voice-diagram__chip--accent">Приложение Яндекса</span>
+            <span class="voice-diagram__chip voice-diagram__chip--accent">CarPlay</span>
             <span class="voice-diagram__chip voice-diagram__chip--accent">Apple Home</span>
-            <span class="voice-diagram__chip voice-diagram__chip--accent">Приложение</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <div class="layout plan">
-    <div class="simple-grid">
-      <div class="plan__info">
-        <h2>работаем <br/> от одного устройства</h2>
-        <Image src={WORKDECOR} alt="" aria-hidden="true" />
-      </div>
-      <div class="home-page__link">
-        <button class="popup-trigger title-blue"  aria-label="Запланировать замер для вашего умного дома">Запишитесь на замер и получите интерактивную карту дома в подарок</button>
-      </div>
+  <section class="layout plan">
+    <div class="plan__banner reveal">
+      <h2>Работаем от одного устройства</h2>
+      <p>Расскажите, что хотите автоматизировать, — предложим решение и посчитаем стоимость</p>
+      <button class="button glancing popup-trigger">Давайте обсудим ваш проект</button>
     </div>
-  </div>
+  </section>
 
   <!-- CAT -->
   <CatOnVacuum/>
@@ -566,21 +562,6 @@ document.addEventListener('DOMContentLoaded', () => {
     gap: 1rem;
   }
 
-  .home-page__link {
-    margin: 0 auto;
-    width: 100%;
-    text-align: right;
-  }
-
-  .home-page__link.center {
-    text-align: center;
-  }
-
-  .home-page__link button {
-    font-size: calc(var(--base-font-size) * 1.5);
-    font-weight: 500;
-  }
-
   .simple-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -694,16 +675,17 @@ document.addEventListener('DOMContentLoaded', () => {
     padding-right: calc(var(--space) * 1.5);
   }
 
+  /* именно height, не max-height: c max-height Chrome занижает max-content
+     ширину трека на ширину SVG-лого, и группы наезжают друг на друга на стыке */
   .brands-marquee__group :global(img) {
-    max-height: 1.2rem;
+    height: 1.2rem;
     width: auto;
-    height: auto;
     flex-shrink: 0;
   }
 
   /* двухстрочный логотип — при общей высоте нечитаем, даём чуть больше */
   .brands-marquee__group :global(img[alt='Kraab Systems']) {
-    max-height: 1.9rem;
+    height: 1.9rem;
   }
 
   .brands-marquee__badge {
@@ -734,10 +716,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* live demo */
-
-  .home-page-demo {
-    margin-bottom: var(--space-section);
-  }
 
   .home-page-demo h2 {
     text-align: center;
@@ -788,9 +766,10 @@ document.addEventListener('DOMContentLoaded', () => {
       display: none;
     }
 
+    /* демо-дашборд заточен под iPad 7: ландшафт 1080×810 (4:3) */
     .home-page-demo__embed {
       display: block;
-      max-width: 1000px;
+      max-width: 1080px;
       margin: 0 auto;
       border-radius: var(--radius-card);
       overflow: hidden;
@@ -800,7 +779,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .home-page-demo__embed iframe {
       display: block;
       width: 100%;
-      aspect-ratio: 16 / 10;
+      aspect-ratio: 4 / 3;
       border: 0;
       background: var(--color-light);
     }
@@ -902,10 +881,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* steps block */
-
-  .home-page-work-steps {
-    margin-bottom: var(--space-section);
-  }
 
   .home-page-work-steps__wrapper {
     display: grid;
@@ -1060,41 +1035,27 @@ document.addEventListener('DOMContentLoaded', () => {
     background: var(--color-dark-blue);
   }
 
-  /* plan */
+  /* plan (CTA-баннер) */
 
-  .plan .simple-grid {
-    margin-bottom: calc(var(--space) * 2);
-  }
-
-  .plan__info {
+  .plan__banner {
     display: flex;
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: center;
     gap: var(--space);
+    margin-bottom: calc(var(--space) * 2);
+    padding: calc(var(--space) * 2) var(--space);
+    text-align: center;
+    background: var(--gradient-soft);
+    border-radius: var(--radius-card);
   }
 
-  .plan__info h2 {
-    font-size: calc(var(--base-font-size) * 1.6);
+  .plan__banner h2,
+  .plan__banner p {
     margin-bottom: 0;
   }
 
-  .plan__info img {
-    width: 100%;
-    max-width: 110px;
-  }
-
-  .plan .home-page__link button {
-    text-align: right;
-    text-decoration: underline;
-    text-underline-offset: 2px;
-    transition: text-decoration 0.3s ease-in;
-  }
-
-  .plan .home-page__link button:hover {
-    color: var(--text-accent);
-  }
-
-  .plan .home-page__link button:not(:is(:hover, :focus)) {
-    text-decoration-color: color-mix(in srgb, currentColor, transparent 75%);
+  .plan__banner p {
+    max-width: 560px;
   }
 
   /* media queries */
@@ -1215,19 +1176,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     .home-page-work-steps__description p {
       max-width: unset;
-    }
-  }
-
-  @media screen and (max-width: 790px) {
-
-    .plan__info {
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
-    .plan .home-page__link  {
-      text-align: center;
     }
   }
 

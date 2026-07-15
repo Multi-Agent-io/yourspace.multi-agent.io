@@ -29,7 +29,9 @@
 
       <!-- Form state -->
       <form v-else ref="formRef" @submit.prevent="submitForm">
+        <!-- без sitekey (нет .env в dev) капчу не монтируем, чтобы не падала инициализация -->
         <vue-hcaptcha
+          v-if="siteKey"
           ref="hcaptchaRef"
           :sitekey="siteKey"
           size="invisible"
@@ -163,7 +165,7 @@ async function sendEmail(token: string) {
 
     success.value = true;
     formRef.value.reset();
-    hcaptchaRef.value.reset();
+    hcaptchaRef.value?.reset();
   } catch (err: any) {
     status.value = `❌ Ошибка: ${err.text || err.message}`;
   } finally {
@@ -178,6 +180,9 @@ function submitForm() {
   }
   if (hcaptchaRef.value) {
     hcaptchaRef.value.execute();
+  } else {
+    // dev-режим без sitekey — отправляем без токена капчи
+    sendEmail('');
   }
 }
 

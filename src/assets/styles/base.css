@@ -130,6 +130,11 @@ button.button.glancing::before {
   background-color: rgba(160, 197, 232, 0.21);
 }
 
+/* соседние синие секции сливаются в одну полосу без белого зазора */
+.section-blue + .section-blue {
+  padding-top: 0;
+}
+
 .button {
   font-family: var(--font-family-display);
   font-weight: 500;

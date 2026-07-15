@@ -11,6 +11,8 @@ interface Props {
   loop?: boolean;
   cls?: string;
   useGrid?: boolean;
+  /** задержка автолистания в мс; не задано — автолистания нет */
+  autoplay?: number;
 }
 
 const {
@@ -21,6 +23,7 @@ const {
   loop = true,
   cls = '',
   useGrid = false,
+  autoplay,
 } = Astro.props as Props;
 
 const uid = `swiper-${Math.random().toString(36).substring(2, 9)}`;
@@ -78,7 +81,15 @@ if (useGrid) {
     rows: 1,
     fill: 'row',
   } as any;
-} 
+}
+
+if (autoplay) {
+  baseOptions.autoplay = {
+    delay: autoplay,
+    disableOnInteraction: false,
+    pauseOnMouseEnter: true,
+  };
+}
 
 ---
 <div class={`${buttons ? 'swiper-wrapper-container' : ''} ${cls}`}>
@@ -106,6 +117,13 @@ if (useGrid) {
       swiper.navigation.destroy();
       swiper.navigation.init();
       swiper.navigation.update();
+    }
+
+    // уважаем prefers-reduced-motion: автолистание выключаем
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll<HTMLElement & { swiper?: any }>('.swiper').forEach((el) => {
+        el.swiper?.autoplay?.stop();
+      });
     }
   };
 

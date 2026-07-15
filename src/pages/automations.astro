@@ -59,14 +59,6 @@ const formatPrice = (price: number) => new Intl.NumberFormat('ru-RU').format(pri
             <span class="automation-card__category">{categoryLabels[item.category]}</span>
             <h3>{item.title}</h3>
             <p>{item.description}</p>
-            {item.includes && (
-              <details class="automation-card__includes">
-                <summary>Состоит из</summary>
-                <ul>
-                  {item.includes.map((part) => <li>{part}</li>)}
-                </ul>
-              </details>
-            )}
             <div class="automation-card__footer">
               {item.price ? (
                 <div class="automation-card__price">
@@ -248,22 +240,6 @@ const formatPrice = (price: number) => new Intl.NumberFormat('ru-RU').format(pri
     color: var(--color-green);
     background-color: rgba(160, 197, 232, 0.25);
     border-radius: 2em;
-  }
-
-  .automation-card__includes summary {
-    cursor: pointer;
-    font-size: calc(var(--base-font-size) * 0.85);
-    font-weight: 500;
-    color: var(--text-accent);
-  }
-
-  .automation-card__includes ul {
-    margin: var(--space-half) 0 0 var(--space-half);
-    font-size: calc(var(--base-font-size) * 0.9);
-  }
-
-  .automation-card__includes li {
-    margin-bottom: 0.3em;
   }
 
   .automation-card__footer {
