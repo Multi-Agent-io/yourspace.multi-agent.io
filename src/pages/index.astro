@@ -84,20 +84,34 @@ const protocols = [
     <div class="layout">
       <div class="home-page-main__grid">
         <div class="home-page-main__content">
-          <h1>YourSpace -
+          <h1>YourSpace —
             <span class="title-sub">умный дом, который объединяет всё!</span>
           </h1>
-          <div class="home-page-main__text">
-            <div class="section-offer">
-              <p><a href="#" class="text-blue popup-trigger">Умный свет</a> в 2-к кв. под ключ + 2 сценария</p>
-              <p class="section-offer-subtitle"><a href="#" class="text-blue popup-trigger">Без штробления и сверления</a></p>
-              <button class="button glancing popup-trigger">от 45 тысяч рублей</button>
-            </div>
+          <p class="home-page-main__lead">
+            Свет, климат, музыка и безопасность любых брендов — в одном
+            приложении. Локально: без облаков и подписок.
+          </p>
+          <ul class="hero-chips">
+            <li>Работает без интернета</li>
+            <li>Без штробления и сверления</li>
+            <li>35+ готовых сценариев</li>
+            <li>Алиса, Siri и Apple Home</li>
+          </ul>
+          <div class="hero-actions">
+            <a class="button glancing" href="#demo">Потрогать живое демо</a>
+            <button class="button-light popup-trigger">Обсудить проект</button>
           </div>
         </div>
-        <div class="home-page-main__image popup-trigger">
-          <Image src={SHFEATURES1} alt="Умный дом" />
-        </div>
+        {demoCover ? (
+          <a class="home-page-main__image home-page-main__image--demo" href="#demo" aria-label="К живому демо умного дома">
+            <span class="home-page-main__badge">● Живое демо</span>
+            <Image src={demoCover} alt="Интерфейс умного дома YourSpace — живое демо" />
+          </a>
+        ) : (
+          <a class="home-page-main__image" href="#demo" aria-label="К живому демо умного дома">
+            <Image src={SHFEATURES1} alt="Умный дом" />
+          </a>
+        )}
       </div>
     </div>
   </section>
@@ -624,16 +638,73 @@ document.addEventListener('DOMContentLoaded', () => {
     height: auto;
   }
 
-  .home-page-main__text {
+  /* вариант со скрином живого демо: рамка-карточка с бейджем */
+  .home-page-main__image--demo {
     position: relative;
-    max-width: 580px;
-    z-index: 1;
+    display: block;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
-  .home-page-main__text p {
+  .home-page-main__image--demo:hover {
+    transform: translateY(-4px) scale(1.005);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .home-page-main__image--demo img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .home-page-main__badge {
+    position: absolute;
+    top: var(--space-half);
+    left: var(--space-half);
+    padding: 0.3em 0.9em;
+    font-size: calc(var(--base-font-size) * 0.75);
     font-weight: 500;
+    color: #fff;
+    background: var(--gradient-accent);
+    border-radius: 2em;
+    z-index: 2;
+  }
+
+  .home-page-main__lead {
+    max-width: 560px;
     margin-bottom: var(--space);
-    line-height: 1.2;
+    font-size: calc(var(--base-font-size) * 1.1);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .hero-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--space-half) * 0.6);
+    margin-left: 0;
+    margin-bottom: calc(var(--space) * 1.2);
+    padding: 0;
+    list-style: none;
+  }
+
+  .hero-chips li {
+    padding: 0.35em 0.9em;
+    font-size: calc(var(--base-font-size) * 0.8);
+    font-weight: 500;
+    background-color: var(--color-light);
+    border: 1px solid var(--color-dark-blue);
+    border-radius: 2em;
+    white-space: nowrap;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: calc(var(--space) * 0.6);
   }
 
   /* brands marquee */
@@ -1062,7 +1133,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   @media screen and (max-width: 1200px) {
     .home-page-main__grid {
-      grid-template-columns: 2fr 1fr;
+      grid-template-columns: 1.4fr 1fr;
     }
   }
 
@@ -1079,13 +1150,13 @@ document.addEventListener('DOMContentLoaded', () => {
   @media screen and (max-width: 990px) {
     .home-page-main__grid {
       grid-template-columns: 1fr;
-      gap: calc(var(--space) * 0.5);
+      gap: var(--space);
       min-height: auto;
     }
 
-    .home-page-main__image {
-      order: -1;
-      margin-bottom: var(--space);
+    /* на мобилке та же обложка демо идёт сразу ниже в секции #demo — не дублируем */
+    .home-page-main__image--demo {
+      display: none;
     }
   }
 
@@ -1189,37 +1260,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  .section-offer {
-    margin-top: calc(var(--space) * 2);
-    margin-bottom: calc(var(--space) * 2);
-  }
-
-  .section-offer p {
-    margin-bottom: 0;
-    font-weight: bold;
-    font-size: calc(var(--base-font-size) * 1.1);
-  }
-
-  .section-offer p.section-offer-subtitle {
-    font-size: 0.8em;
-  }
-
-  .section-offer .button {
-    margin-top: calc(var(--space)*0.5);
-  }
-
   @media screen and (width < 470px) {
     .button.glancing {
       width: 100%;
     }
 
-    .section-offer {
-      margin-bottom: calc(var(--space) * 4);
-    }
-
-    .home-page-main__image {
-      max-width: 80%;
-      margin: calc(var(--space) * 3) auto var(--space);
+    .hero-actions .button-light {
+      width: 100%;
+      justify-content: center;
     }
   }
 </style>
