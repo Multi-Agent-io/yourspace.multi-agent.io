@@ -10,14 +10,8 @@ import CatOnVacuum from '../components/CatOnVacuum.astro';
 import Popup from '../components/Popup.astro';
 
 import { brands, brandLogo } from '../data/brandsData';
-import { automations } from '../data/automationsData';
 
 // images
-import FEAT1 from '../assets/img/feat-decor-1.webp';
-import FEAT2 from '../assets/img/feat-decor-2.webp';
-import FEAT3 from '../assets/img/feat-decor-3.webp';
-import FEAT4 from '../assets/img/feat-decor-4.webp';
-
 import SHFEATURES1 from '../assets/img/sh-features.webp';
 import SHFEATURES2 from '../assets/img/sh-features-2.webp';
 import SHFEATURES3 from '../assets/img/sh-features-3.webp';
@@ -30,8 +24,7 @@ import STEP4 from '../assets/img/step-4.webp';
 
 import WORKDECOR from '../assets/img/work-decor.webp';
 
-// TODO: впиши адрес демо-инстанса Home Assistant
-const DEMO_HA_URL = '#';
+const DEMO_HA_URL = 'https://demo.yourspace.multi-agent.io';
 
 // Фото подхватываются автоматически, как только файлы появятся в src/assets/img/showcase/
 // (нужные имена: demo-ha-cover, control-h2, control-relay, control-panel, control-tablet; webp/jpg/png)
@@ -44,27 +37,30 @@ const showcase = (name: string): ImageMetadata | undefined =>
 
 const demoCover = showcase('demo-ha-cover');
 
-const controlCards = [
+// pos — object-position для кропа фото в карточке (по умолчанию центр)
+const controlCards: { img?: ImageMetadata; pos?: string; photoHint: string; title: string; text: string }[] = [
   {
     img: showcase('control-h2'),
     photoHint: 'Aqara H2 на стене крупным планом',
     title: 'Умный выключатель',
-    text: 'Например, Aqara H2: дисплей, сценарии и управление светом прямо на стене.',
+    text: 'Например, Aqara H2: сценарии и управление светом прямо на стене.',
   },
   {
     img: showcase('control-relay'),
+    pos: '50% 35%',
     photoHint: 'Традиционный выключатель + реле в подрозетнике',
     title: 'Ваш любимый выключатель',
     text: 'Реле прячется в подрозетник — любой традиционный выключатель становится умным.',
   },
   {
     img: showcase('control-panel'),
-    photoHint: 'Панель Aqara S1E с включённым экраном',
+    photoHint: 'Панель Aqara S1 Plus с включённым экраном',
     title: 'Настенная панель',
-    text: 'Например, Aqara S1E: свет, шторы и сценарии с изящного экрана на стене.',
+    text: 'Например, Aqara S1 Plus: свет, шторы и сценарии с изящного экрана на стене.',
   },
   {
     img: showcase('control-tablet'),
+    pos: '50% 100%',
     photoHint: 'Планшет с вашим интерфейсом',
     title: 'Планшет с интерфейсом',
     text: 'Весь дом на одном экране. Интерфейс рисуем под вас — и под гостей.',
@@ -75,19 +71,13 @@ const protocols = [
   { name: 'Zigbee', note: 'Тысячи датчиков, выключателей и ламп в собственной mesh-сети' },
   { name: 'Wi-Fi', note: 'Умные устройства в вашей существующей сети' },
   { name: 'Thread', note: 'Энергоэффективная mesh-сеть нового поколения' },
-  { name: 'Matter', note: 'Весь новый стандарт умного дома — целиком' },
+  { name: 'Matter', note: 'Полная поддержка нового стандарта. На вход и на выход' },
   { name: 'DALI', note: 'Профессиональное управление светом: диммирование без мерцания' },
   { name: 'Casambi', note: 'Беспроводное профессиональное управление светом' },
   { name: 'Bluetooth', note: 'Замки, датчики, аудиосистемы рядом с сервером' },
   { name: 'Проводные системы', note: 'Интегрируем существующие шинные и релейные инсталляции' },
 ];
 
-const teaserIds = ['welcome-light', 'wake-up', 'warm-floor', 'master-switch', 'voice-assistants', 'alarm-mode'];
-const teaserAutomations = teaserIds
-  .map((id) => automations.find((a) => a.id === id))
-  .filter((a) => a !== undefined);
-
-const formatPrice = (price: number) => new Intl.NumberFormat('ru-RU').format(price);
 ---
 
 <Layout>
@@ -133,9 +123,17 @@ const formatPrice = (price: number) => new Intl.NumberFormat('ru-RU').format(pri
   </div>
 
   <!-- live demo -->
-  <section class="section-blue home-page-demo">
+  <section id="demo" class="section-blue home-page-demo">
     <div class="layout">
       <h2>Потрогайте умный дом прямо&nbsp;сейчас</h2>
+      <div class="home-page-demo__embed reveal">
+        <iframe
+          src={DEMO_HA_URL}
+          title="Живое демо умного дома YourSpace"
+          loading="lazy"
+          allow="fullscreen"
+        ></iframe>
+      </div>
       <a
         class="home-page-demo__frame reveal"
         href={DEMO_HA_URL}
@@ -149,60 +147,15 @@ const formatPrice = (price: number) => new Intl.NumberFormat('ru-RU').format(pri
           : <span class="photo-placeholder photo-placeholder--wide">📷 Скрин дашборда HA (~1600×1000)</span>
         }
       </a>
-      <p class="home-page-demo__caption">
-        Это не видео и не картинка — настоящий интерфейс нашего умного дома.
-        Нажмите, включите свет и подвигайте шторы!
-      </p>
-    </div>
-  </section>
-
-  <!-- More about Smart Home -->
-  <section class="home-page-more">
-    <div class="layout">
-      <div class="home-page-more__grid">
-        <div class="card home-page-more__grid-item reveal">
-          <Image src={FEAT1} alt="" aria-hidden="true" />
-          <div>
-            <h3>Поддержка тысяч устройств</h3>
-            <p>Среди них точно есть то, что подойдет именно Вам</p>
-          </div>
-        </div>
-        <div class="card home-page-more__grid-item reveal">
-          <Image src={FEAT2} alt="" aria-hidden="true" />
-          <div>
-            <h3>Работает с умной колонкой</h3>
-            <p>Но отлично справляется и без нее</p>
-          </div>
-        </div>
-        <div class="card home-page-more__grid-item reveal">
-          <Image src={FEAT3} alt="" aria-hidden="true" />
-          <div>
-            <h3>Без облаков и проводов</h3>
-            <p>Не нужно заводить учетную запись и прокладывать слаботочку</p>
-          </div>
-        </div>
-        <div class="card home-page-more__grid-item reveal">
-          <Image src={FEAT4} alt="" aria-hidden="true" />
-          <div>
-            <h3>Выглядит стильно</h3>
-            <p>Совместим с EKF и Schneider Electric, можно установить скрытно</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="home-page-banner reveal">
-        <span>Не зависит от бренда</span>
-        <span>Не требует перепланировки</span>
-      </div>
     </div>
   </section>
 
   <!-- Protocols -->
-  <section class="home-page-protocols section-blue">
+  <section id="protocols" class="home-page-protocols section-blue">
     <div class="layout">
       <h2>Работаем со всеми протоколами</h2>
       <p class="home-page-protocols__subtitle">
-        Умный свет по DALI и Casambi, весь Matter, беспроводные датчики
+        Умный свет по Zigbee, DALI и Casambi, весь Matter, беспроводные датчики
         и интеграция проводных систем — в одном доме.
       </p>
       <div class="home-page-protocols__grid">
@@ -217,14 +170,14 @@ const formatPrice = (price: number) => new Intl.NumberFormat('ru-RU').format(pri
   </section>
 
   <!-- Control options -->
-  <section class="home-page-control">
+  <section id="control" class="home-page-control">
     <div class="layout">
       <h2>Управление на любой вкус</h2>
       <div class="home-page-control__grid">
         {controlCards.map((card) => (
           <div class="card control-card reveal">
             {card.img
-              ? <Image src={card.img} alt={card.title} loading="lazy" />
+              ? <Image src={card.img} alt={card.title} loading="lazy" style={card.pos ? `object-position: ${card.pos}` : undefined} />
               : <span class="photo-placeholder">📷 {card.photoHint}</span>
             }
             <h3>{card.title}</h3>
@@ -300,6 +253,11 @@ const formatPrice = (price: number) => new Intl.NumberFormat('ru-RU').format(pri
           </div>
         </SwiperSlide>
       </SwiperComponent>
+
+      <div class="home-page-features__actions">
+        <a class="button glancing" href={withBase('/automations/')}>Прайс автоматизаций</a>
+        <a class="button-light" href={withBase('/automations/#cases')}>Примеры проектов</a>
+      </div>
     </div>
   </section>
 
@@ -363,45 +321,20 @@ const formatPrice = (price: number) => new Intl.NumberFormat('ru-RU').format(pri
     </div>
   </section>
 
-  <!-- Prices teaser -->
-  <section id="prices" class="home-page-prices">
-    <div class="layout">
-      <h2>Автоматизации и цены</h2>
-      <p class="home-page-prices__subtitle">
-        Сценарии с прозрачными ценами: в стоимость входят работы и настройка.
-      </p>
-      <div class="home-page-prices__grid">
-        {teaserAutomations.map((item) => (
-          <a class="card price-card reveal" href={withBase('/automations/')}>
-            <h3>{item.title}</h3>
-            <p>{item.description}</p>
-            <span class="price-card__price">
-              {item.priceFrom && 'от '}{formatPrice(item.price!)} ₽
-            </span>
-          </a>
-        ))}
-      </div>
-      <div class="home-page-prices__actions">
-        <a class="button glancing" href={withBase('/automations/')}>Все автоматизации и цены</a>
-        <a class="button-light" href={withBase('/automations/#cases')}>Примеры проектов</a>
-      </div>
-    </div>
-  </section>
-
   <!-- voice assistant -->
-  <section class="home-page-voice section-blue">
+  <section id="voice" class="home-page-voice section-blue">
     <div class="layout">
       <h2>голосовой помощник</h2>
       <h3 class="title-blue">Алиса научится управлять всем — даже тем, что Яндекс не поддерживает</h3>
       <div class="simple-grid">
         <div class="home-page-voice__info">
           <p>
-            Устройства попадают в Алису через наш сервер, поэтому для неё DALI-светильник,
+            Устройства попадают в Алису через наш сервер, поэтому для неё Casambi-светильник,
             проводной термостат или старый кондиционер — обычные умные устройства.
             Управляйте голосом, из приложения Яндекса и даже из CarPlay.
           </p>
           <ul>
-            <li>Светильники DALI и Casambi</li>
+            <li>Светильники Casambi</li>
             <li>Проводные термостаты и котлы</li>
             <li>Кондиционеры без Wi-Fi — через ИК-пульт</li>
             <li>Apple Home и Siri — так же, параллельно</li>
@@ -409,7 +342,7 @@ const formatPrice = (price: number) => new Intl.NumberFormat('ru-RU').format(pri
         </div>
         <div class="home-page-voice__diagram reveal" role="img" aria-label="Схема: устройства подключаются к серверу умного дома, а сервер — к Алисе, Apple Home и приложению">
           <div class="voice-diagram__col">
-            <span class="voice-diagram__chip">Светильник DALI</span>
+            <span class="voice-diagram__chip">Светильник Casambi</span>
             <span class="voice-diagram__chip">Термостат</span>
             <span class="voice-diagram__chip">Шторы</span>
             <span class="voice-diagram__chip">Кондиционер</span>
@@ -747,7 +680,7 @@ document.addEventListener('DOMContentLoaded', () => {
   .brands-marquee__track {
     display: flex;
     width: max-content;
-    animation: brands-scroll 35s linear infinite;
+    animation: brands-scroll 42s linear infinite;
   }
 
   .brands-marquee:hover .brands-marquee__track {
@@ -766,6 +699,11 @@ document.addEventListener('DOMContentLoaded', () => {
     width: auto;
     height: auto;
     flex-shrink: 0;
+  }
+
+  /* двухстрочный логотип — при общей высоте нечитаем, даём чуть больше */
+  .brands-marquee__group :global(img[alt='Kraab Systems']) {
+    max-height: 1.9rem;
   }
 
   .brands-marquee__badge {
@@ -805,11 +743,16 @@ document.addEventListener('DOMContentLoaded', () => {
     text-align: center;
   }
 
+  /* мобилка: кликабельная обложка; десктоп: живой iframe */
+  .home-page-demo__embed {
+    display: none;
+  }
+
   .home-page-demo__frame {
     position: relative;
     display: block;
     max-width: 1000px;
-    margin: 0 auto var(--space);
+    margin: 0 auto;
     border-radius: var(--radius-card);
     overflow: hidden;
     box-shadow: var(--shadow-card);
@@ -840,63 +783,27 @@ document.addEventListener('DOMContentLoaded', () => {
     z-index: 2;
   }
 
-  .home-page-demo__caption {
-    max-width: 700px;
-    margin: 0 auto;
-    text-align: center;
-    font-size: var(--base-font-size);
-  }
+  @media screen and (min-width: 991px) {
+    .home-page-demo__frame {
+      display: none;
+    }
 
-  /* more block */
+    .home-page-demo__embed {
+      display: block;
+      max-width: 1000px;
+      margin: 0 auto;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
 
-  .home-page-more {
-    margin-bottom: var(--space-section);
-  }
-
-  .home-page-more__grid {
-    display: grid;
-    align-items: stretch;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--space);
-    margin-bottom: var(--space);
-  }
-
-  .home-page-more__grid h3 {
-    margin-bottom: var(--space-half);
-  }
-
-  .home-page-more__grid-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space);
-  }
-
-  .home-page-more__grid-item img {
-    max-width: 72px;
-  }
-
-  .home-page-more__grid-item p {
-    margin-bottom: 0;
-    font-size: var(--base-font-size);
-  }
-
-  .home-page-banner {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-around;
-    gap: var(--space-half);
-    padding: calc(var(--space) * 1.1) var(--space);
-    background: var(--gradient-accent);
-    border-radius: var(--radius-card);
-  }
-
-  .home-page-banner span {
-    font-family: var(--font-family-display);
-    font-size: calc(var(--base-font-size) * 1.1);
-    font-weight: 600;
-    color: #fff;
-    text-align: center;
+    .home-page-demo__embed iframe {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      border: 0;
+      background: var(--color-light);
+    }
   }
 
   /* protocols */
@@ -981,6 +888,19 @@ document.addEventListener('DOMContentLoaded', () => {
     max-width: 50%;
   }
 
+  .home-page-features__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space);
+    margin-top: var(--space);
+  }
+
+  .home-page-features__actions .button-light {
+    font-size: calc(var(--base-font-size) * 0.9);
+  }
+
   /* steps block */
 
   .home-page-work-steps {
@@ -1063,62 +983,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   .home-page-work-steps__pic--last, .home-page-work-steps__description--last {
     margin-right: 0;
-  }
-
-  /* prices teaser */
-
-  .home-page-prices {
-    margin-bottom: var(--space-section);
-  }
-
-  .home-page-prices__subtitle {
-    max-width: 720px;
-    margin-bottom: calc(var(--space) * 1.5);
-  }
-
-  .home-page-prices__grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space);
-    margin-bottom: calc(var(--space) * 1.5);
-  }
-
-  .price-card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-half);
-    color: var(--text-color);
-  }
-
-  .price-card h3 {
-    margin-bottom: 0;
-    font-size: calc(var(--base-font-size) * 0.95);
-  }
-
-  .price-card p {
-    margin-bottom: 0;
-    font-size: calc(var(--base-font-size) * 0.9);
-  }
-
-  .price-card__price {
-    margin-top: auto;
-    padding-top: var(--space-half);
-    font-family: var(--font-family-display);
-    font-weight: 600;
-    font-size: calc(var(--base-font-size) * 1.1);
-    color: var(--text-accent);
-  }
-
-  .home-page-prices__actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: var(--space);
-  }
-
-  .home-page-prices__actions .button-light {
-    font-size: calc(var(--base-font-size) * 0.9);
   }
 
   /* home page voice assistant */
@@ -1249,10 +1113,6 @@ document.addEventListener('DOMContentLoaded', () => {
     .home-page-control__grid {
       grid-template-columns: repeat(2, 1fr);
     }
-
-    .home-page-prices__grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
   }
 
   @media screen and (max-width: 990px) {
@@ -1269,7 +1129,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   @media screen and (max-width: 850px) {
-    .home-page-more__grid, .home-page-work-steps__wrapper {
+    .home-page-work-steps__wrapper {
       grid-template-columns: 1fr;
     }
 
@@ -1377,10 +1237,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     .home-page-control__grid {
-      grid-template-columns: 1fr;
-    }
-
-    .home-page-prices__grid {
       grid-template-columns: 1fr;
     }
   }

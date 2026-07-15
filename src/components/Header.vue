@@ -11,17 +11,23 @@
       <div class="header-right">
         <nav class="nav" :class="{'active': isOpen}" role="menu">
         <ul class="nav__list">
-          <li class="nav__item" @click="closeMenu">
-            <a :href="featuresUrl" aria-label="Перейти к разделу 'Возможности'" class="link">Возможности</a>
+          <li class="nav__item nav__item--dropdown" @click="closeMenu">
+            <a :href="mainUrl" aria-label="Перейти на главную страницу">Главная</a>
+            <ul class="nav__sub">
+              <li><a :href="demoUrl" aria-label="Перейти к живому демо">Живое демо</a></li>
+              <li><a :href="protocolsUrl" aria-label="Перейти к разделу 'Протоколы'">Протоколы</a></li>
+              <li><a :href="controlUrl" aria-label="Перейти к разделу 'Управление'">Управление</a></li>
+              <li><a :href="featuresUrl" aria-label="Перейти к разделу 'Возможности'">Возможности</a></li>
+              <li><a :href="stepsUrl" aria-label="Перейти к разделу 'Этапы работы'">Этапы работы</a></li>
+              <li><a :href="voiceUrl" aria-label="Перейти к разделу 'Голосовой помощник'">Голосовой помощник</a></li>
+            </ul>
           </li>
-          <li class="nav__item" @click="closeMenu">
+          <li class="nav__item nav__item--dropdown" @click="closeMenu">
             <a :href="pricesUrl" aria-label="Перейти к странице 'Автоматизации и цены'">Цены</a>
-          </li>
-          <li class="nav__item" @click="closeMenu">
-            <a :href="casesUrl" aria-label="Перейти к разделу 'Кейсы'">Кейсы</a>
-          </li>
-          <li class="nav__item" @click="closeMenu">
-            <a :href="stepsUrl" aria-label="Перейти к разделу 'Этапы Работы'">Этапы Работы</a>
+            <ul class="nav__sub">
+              <li><a :href="pricesUrl" aria-label="Перейти к прайсу автоматизаций">Прайс автоматизаций</a></li>
+              <li><a :href="casesUrl" aria-label="Перейти к примерам работ">Примеры работ</a></li>
+            </ul>
           </li>
           <li class="nav__item">
             <a :href="aboutUsUrl" aria-label="Узнать больше о нас">О&nbsp;нас</a>
@@ -65,10 +71,14 @@ const closeMenu = (): void => {
 };
 
 const aboutUsUrl = withBase('/about-us/');
+const demoUrl = withBase('/#demo');
+const protocolsUrl = withBase('/#protocols');
+const controlUrl = withBase('/#control');
 const featuresUrl = withBase('/#features');
+const stepsUrl = withBase('/#steps');
+const voiceUrl = withBase('/#voice');
 const pricesUrl = withBase('/automations/');
 const casesUrl = withBase('/automations/#cases');
-const stepsUrl = withBase('/#steps');
 const mainUrl = withBase('/');
 
 const openPopup = (): void => {
@@ -97,6 +107,7 @@ const openPopup = (): void => {
     justify-content: space-between;
     align-items: center;
     padding: calc(var(--space) * 0.4) var(--space);
+    overflow: visible; /* иначе .layout режет выпадающие меню */
   }
 
   .header__logo {
@@ -150,6 +161,50 @@ const openPopup = (): void => {
 
   .nav__list a:hover::before{
     transform: translate(-50%, 50%) scaleX(1);
+  }
+
+  /* dropdown submenus */
+
+  .nav__sub {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  @media screen and (min-width: 1121px) {
+    .nav__item--dropdown {
+      position: relative;
+    }
+
+    .nav__sub {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      display: flex;
+      flex-direction: column;
+      min-width: 230px;
+      padding: 0.5em 1.1em;
+      background: var(--color-light);
+      border: 1px solid rgba(160, 197, 232, 0.35);
+      border-radius: calc(var(--radius-card) * 0.5);
+      box-shadow: var(--shadow-card-hover);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+      z-index: 20;
+    }
+
+    .nav__item--dropdown:hover .nav__sub,
+    .nav__item--dropdown:focus-within .nav__sub {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .nav__sub a {
+      white-space: nowrap;
+    }
   }
 
   .nav__item button {
@@ -257,6 +312,22 @@ const openPopup = (): void => {
 
     .nav__item a,
     .nav__item button  { font-size: var(--base-font-size); }
+
+    /* в мобильном меню подпункты видны сразу, без ховера */
+    .nav__item { text-align: center; }
+
+    .nav__sub {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.1em;
+      margin: 0.2em 0 0.8em;
+    }
+
+    .nav__sub a {
+      font-size: calc(var(--base-font-size) * 0.85);
+      font-weight: 400;
+    }
 
     .header__btn { display: flex; }
   }
