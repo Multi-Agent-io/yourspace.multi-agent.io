@@ -20,7 +20,7 @@ body {
   min-height: 100%;
   color: var(--text-color);
   font-family: var(--font-family);
-  font-variation-settings: var(--font-flex-base);
+  font-weight: 400;
   line-height: 1.5;
   background-color: var(--color-light);
   transition: color .6s, background-color .6s;
@@ -128,4 +128,45 @@ button.button.glancing::before {
 .section-blue {
   padding: calc(var(--space)*2) 0;
   background-color: rgba(160, 197, 232, 0.21);
+}
+
+.button {
+  font-family: var(--font-family-display);
+  font-weight: 500;
+  font-size: calc(var(--base-font-size) * 0.9);
+}
+
+/* unified card */
+.card {
+  background: var(--color-light);
+  border: 1px solid rgba(160, 197, 232, 0.35);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: calc(var(--space) * 0.9);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* scroll-reveal (managed from Layout.astro) */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal--visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }

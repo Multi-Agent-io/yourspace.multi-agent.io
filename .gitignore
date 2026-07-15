@@ -1,6 +1,9 @@
 # build output
 dist/
 
+# local working files (plans, scratch)
+tmp/
+
 # generated types
 .astro/
 

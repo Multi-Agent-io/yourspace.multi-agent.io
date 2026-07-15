@@ -39,7 +39,9 @@ import '../assets/styles/main.css';
 	<title>{title}</title>
 	<meta name="description" content={description}>
 
-  <link rel="preload" as="font" href="/fonts/RobotoFlex-VariableFont.woff2" type="font/woff2" crossorigin />
+  <link rel="preload" as="font" href="/fonts/Onest-cyrillic.woff2" type="font/woff2" crossorigin />
+  <link rel="preload" as="font" href="/fonts/Onest-latin.woff2" type="font/woff2" crossorigin />
+  <link rel="preload" as="font" href="/fonts/Unbounded-cyrillic.woff2" type="font/woff2" crossorigin />
 
 	<!-- Open Graph Metadata -->
 	<meta property="og:title" content={title}>
@@ -76,5 +78,22 @@ import '../assets/styles/main.css';
 		item?.addEventListener('click', () => {
 			window.dispatchEvent(new CustomEvent('open-contact-popup'));
 		});
-	})
+	});
+
+	// Scroll-reveal: элементы с классом .reveal плавно проявляются при попадании во viewport
+	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	const revealItems = document.querySelectorAll('.reveal');
+	if (reduceMotion || !('IntersectionObserver' in window)) {
+		revealItems.forEach(el => el.classList.add('reveal--visible'));
+	} else {
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					entry.target.classList.add('reveal--visible');
+					observer.unobserve(entry.target);
+				}
+			});
+		}, { threshold: 0.12 });
+		revealItems.forEach(el => observer.observe(el));
+	}
 </script>

@@ -76,7 +76,7 @@ const openPopup = (): void => {
 
   header {
     font-size: calc(var(--base-font-size) * 0.8);
-    font-variation-settings: var(--font-flex-medium);
+    font-weight: 500;
     position: sticky;
     top: 0;
     z-index: 999;
@@ -118,7 +118,7 @@ const openPopup = (): void => {
     display: inline-block;
     padding: 0.4em 0;
     font-size: calc(var(--base-font-size) * 0.8);
-    font-variation-settings: var(--font-flex-medium);
+    font-weight: 500;
     color: var(--color-dark);
     z-index: 1;
     text-transform: lowercase;

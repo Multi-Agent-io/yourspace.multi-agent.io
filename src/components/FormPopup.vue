@@ -207,7 +207,7 @@ form {
 
 input, textarea {
   font-family: inherit;
-  font-variation-settings: var(--font-flex-base);
+  font-weight: 400;
   padding: 0.8rem;
   color: var(--color-dark);
   border: 1px solid #ccc;

@@ -1,13 +1,8 @@
 body {
 
 	--base-font-size: 1.2rem;
-	--font-family: "Roboto Flex", 'Roboto', system-ui, sans-serif;
-	--font-flex-base: 'wght' 500, 'wdth' 115, 'opsz' 32, 'XTRA' 520, 'XOPQ' 96, 'YOPQ' 79, 'YTAS' 750, 'YTDE' -203, 'YTFI' 738, 'YTLC' 514, 'YTUC' 712,  'GRAD' 132;
-	--font-flex-bold: 'wght' 700, 'wdth' 120, 'opsz' 64, 'XTRA' 520, 'XOPQ' 96, 'YOPQ' 79, 'YTAS' 750, 'YTDE' -203, 'YTFI' 738, 'YTLC' 514, 'YTUC' 712, 'GRAD' 132;
-	--font-flex-medium: 'wght' 500, 'wdth' 120, 'opsz' 34, 'XTRA' 520, 'XOPQ' 96, 'YOPQ' 79, 'YTAS' 750, 'YTDE' -203, 'YTFI' 738, 'YTLC' 514, 'YTUC' 712, 'GRAD' 132;
-	--font-flex-normal: 'wght' 400, 'wdth' 110, 'opsz' 34, 'XTRA' 520, 'XOPQ' 96, 'YOPQ' 79, 'YTAS' 750, 'YTDE' -203, 'YTFI' 738, 'YTLC' 514, 'YTUC' 712;
-	--font-flex-light: 'wght' 350, 'wdth' 120, 'opsz' 32, 'XTRA' 520, 'XOPQ' 96, 'YOPQ' 79, 'YTAS' 750, 'YTDE' -203, 'YTFI' 738, 'YTLC' 514, 'YTUC' 712;
-	--font-flex-italic-light: 'wght' 350, 'wdth' 120, 'opsz' 32, 'XTRA' 520, 'XOPQ' 96, 'YOPQ' 79, 'YTAS' 750, 'YTDE' -203, 'YTFI' 738, 'YTLC' 514, 'YTUC' 712,  'slnt' -10;
+	--font-family: "Onest", system-ui, sans-serif;
+	--font-family-display: "Unbounded", "Onest", system-ui, sans-serif;
 
 	--color-dark: #191919;
 	--color-light: #ffffff;
@@ -19,6 +14,13 @@ body {
 	--text-accent: #4285f4;
 	--text-secondary: #d9d9d9;
 	--error-color: #c60d0d;
+
+	/* cards & accents */
+	--radius-card: 1.25rem;
+	--shadow-card: 0 6px 24px rgba(23, 89, 115, 0.08);
+	--shadow-card-hover: 0 10px 32px rgba(23, 89, 115, 0.16);
+	--gradient-accent: linear-gradient(120deg, #4285f4, #175973);
+	--gradient-soft: linear-gradient(160deg, rgba(160, 197, 232, 0.25), rgba(219, 235, 251, 0.45));
 
 	/* helpers */
   --space: 2rem;

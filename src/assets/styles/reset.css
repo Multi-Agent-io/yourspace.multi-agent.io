@@ -71,12 +71,11 @@ input::-webkit-inner-spin-button {
 a {
   color: var(--color-dark);
   text-decoration: none;
-  font-variation-settings: 'GRAD' 132, 'wdth' 120;
 }
 
 button {
   font-family: var(--font-family);
-  font-variation-settings: var(--font-flex-bold);
+  font-weight: 700;
   background-color: transparent;
   border: 1px solid transparent;
 }
