@@ -43,19 +43,9 @@ export const automations: Automation[] = [
     priceNote: 'с присутствием — 9 490 ₽',
   },
   {
-    id: 'warm-floor',
-    category: 'climate',
-    popular: true,
-    title: 'Тёплый пол по утрам',
-    description:
-      'За полчаса до будильника на смартфоне подогреется любой тёплый пол — без колонок и жёсткого расписания.',
-    price: 7020,
-    priceFrom: true,
-    priceNote: 'с присутствием — 9 490 ₽',
-  },
-  {
     id: 'night-mode',
     category: 'light',
+    popular: true,
     title: 'Авто ночной режим',
     description:
       'При активации «Не беспокоить» или расписания сна на смартфоне текущие светильники диммируются до 20%, а новые включаются приглушенными.',
@@ -73,9 +63,19 @@ export const automations: Automation[] = [
     price: 1820,
   },
   {
+    id: 'warm-floor',
+    category: 'climate',
+    popular: true,
+    title: 'Тёплый пол по утрам',
+    description:
+      'За полчаса до будильника на смартфоне подогреется любой тёплый пол — без колонок и жёсткого расписания.',
+    price: 7020,
+    priceFrom: true,
+    priceNote: 'с присутствием — 9 490 ₽',
+  },
+  {
     id: 'notifications',
     category: 'security',
-    popular: true,
     title: 'Любые уведомления',
     description:
       'О срабатывании датчиков и важных событиях — с фотографиями или данными прямо в уведомлении.',
@@ -114,7 +114,6 @@ export const automations: Automation[] = [
   {
     id: 'alarm-mode',
     category: 'security',
-    popular: true,
     title: 'Режим охраны на основе существующих датчиков',
     description:
       'Уведомления об открытии, движении, вибрации, протечке, дыме. Различные способы поставить и снять с охраны.',
