@@ -147,18 +147,11 @@ const protocols = [
         ></iframe>
       </div>
       <a
-        class="home-page-demo__frame reveal"
+        class="button-light home-page-demo__open"
         href={DEMO_HA_URL}
         target="_blank"
         rel="noopener"
-        aria-label="Открыть живое демо умного дома в новой вкладке"
-      >
-        <span class="home-page-demo__badge">● Живое демо</span>
-        {demoCover
-          ? <Image src={demoCover} alt="Интерфейс умного дома YourSpace" />
-          : <span class="photo-placeholder photo-placeholder--wide">📷 Скрин дашборда HA (~1600×1000)</span>
-        }
-      </a>
+      >Открыть демо на весь экран ↗</a>
     </div>
   </section>
 
@@ -598,10 +591,6 @@ document.addEventListener('DOMContentLoaded', () => {
     border-radius: calc(var(--radius-card) * 0.6);
   }
 
-  .photo-placeholder--wide {
-    aspect-ratio: 16 / 10;
-  }
-
   /* main block */
 
   .home-page-main {
@@ -792,67 +781,39 @@ document.addEventListener('DOMContentLoaded', () => {
     text-align: center;
   }
 
-  /* мобилка: кликабельная обложка; десктоп: живой iframe */
+  /* мобилка: iframe почти на весь экран (полоска страницы остаётся, чтобы проскроллить мимо)
+     + ссылка на полноэкранное демо; десктоп: 4:3 */
   .home-page-demo__embed {
-    display: none;
-  }
-
-  .home-page-demo__frame {
-    position: relative;
-    display: block;
-    max-width: 1000px;
+    max-width: 1080px;
     margin: 0 auto;
     border-radius: var(--radius-card);
     overflow: hidden;
     box-shadow: var(--shadow-card);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
-  .home-page-demo__frame:hover {
-    transform: translateY(-4px) scale(1.005);
-    box-shadow: var(--shadow-card-hover);
-  }
-
-  .home-page-demo__frame img {
+  .home-page-demo__embed iframe {
     display: block;
     width: 100%;
-    height: auto;
+    height: 80svh;
+    border: 0;
+    background: var(--color-light);
   }
 
-  .home-page-demo__badge {
-    position: absolute;
-    top: var(--space-half);
-    left: var(--space-half);
-    padding: 0.3em 0.9em;
-    font-size: calc(var(--base-font-size) * 0.75);
-    font-weight: 500;
-    color: #fff;
-    background: var(--gradient-accent);
-    border-radius: 2em;
-    z-index: 2;
+  .home-page-demo__open {
+    display: flex;
+    width: fit-content;
+    margin: var(--space-half) auto 0;
   }
 
   @media screen and (min-width: 991px) {
-    .home-page-demo__frame {
-      display: none;
-    }
-
     /* демо-дашборд заточен под iPad 7: ландшафт 1080×810 (4:3) */
-    .home-page-demo__embed {
-      display: block;
-      max-width: 1080px;
-      margin: 0 auto;
-      border-radius: var(--radius-card);
-      overflow: hidden;
-      box-shadow: var(--shadow-card);
+    .home-page-demo__embed iframe {
+      height: auto;
+      aspect-ratio: 4 / 3;
     }
 
-    .home-page-demo__embed iframe {
-      display: block;
-      width: 100%;
-      aspect-ratio: 4 / 3;
-      border: 0;
-      background: var(--color-light);
+    .home-page-demo__open {
+      display: none;
     }
   }
 
@@ -1154,7 +1115,7 @@ document.addEventListener('DOMContentLoaded', () => {
       min-height: auto;
     }
 
-    /* на мобилке та же обложка демо идёт сразу ниже в секции #demo — не дублируем */
+    /* на мобилке сразу ниже в секции #demo идёт само живое демо — скрин не дублируем */
     .home-page-main__image--demo {
       display: none;
     }
