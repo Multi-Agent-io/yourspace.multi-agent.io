@@ -28,12 +28,7 @@ jobs:
         run: yarn install 
 
       - name: Run yarn build
-        run: yarn build  
-        env: 
-          PUBLIC_EMAILJS_SERVICE_ID: ${{ secrets.PUBLIC_EMAILJS_SERVICE_ID }}
-          PUBLIC_EMAILJS_TEMPLATE_ID: ${{ secrets.PUBLIC_EMAILJS_TEMPLATE_ID }}
-          PUBLIC_EMAILJS_PUBLIC_KEY: ${{ secrets.PUBLIC_EMAILJS_PUBLIC_KEY }}
-          PUBLIC_HCAPTCHA: ${{ secrets.PUBLIC_HCAPTCHA }}
+        run: yarn build
 
       - name: Add .nojekyll file
         run: touch dist/.nojekyll
